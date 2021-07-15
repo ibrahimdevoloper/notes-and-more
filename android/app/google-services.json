@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "961598001686",
+    "project_id": "notes-and-more",
+    "storage_bucket": "notes-and-more.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:961598001686:android:744f6b9c5b9e4363f09b37",
+        "android_client_info": {
+          "package_name": "com.notesandmore.name"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "961598001686-hk912s2dlh8jm1s045t0v8s9q1vuakdg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7CImW2_V2cW6c8-Z9sb2-xom7a7-sjpA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "961598001686-hk912s2dlh8jm1s045t0v8s9q1vuakdg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
