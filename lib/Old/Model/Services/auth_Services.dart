@@ -1,33 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:mh_care/Model/Models/user_data.dart';
+// import 'package:mh_care/Model/Models/user_data.dart';
+import 'package:mh_care/Old/Model/Models/user_data.dart';
+import 'package:mh_care/Old/Model/Models/user_model.dart';
 import 'constant.dart';
 import 'package:provider/provider.dart';
-import 'package:mh_care/Model/Models/user_model.dart';
-import 'package:mh_care/Model/Services/globals.dart' as global;
+// import 'package:mh_care/Model/Models/user_model.dart';
+import 'package:mh_care/Old/Model/Services/globals.dart' as global;
 
 class AuthServices {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
-  static final Firestore _firestore = Firestore.instance;
-  static final FirebaseMessaging _messaging = FirebaseMessaging();
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   static Future<void> signUpUser(
       BuildContext context, String name, String email, String password) async {
     try {
-      AuthResult authResult = await _auth.createUserWithEmailAndPassword(
+      var authResult = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      FirebaseUser signedInUser = authResult.user;
+      User signedInUser = authResult.user;
       if (signedInUser != null) {
         String token = await _messaging.getToken();
-        _firestore
-            .collection('/${global.sRole}')
-            .document(signedInUser.uid)
-            .setData({
+        _firestore.collection('/${global.sRole}').doc(signedInUser.uid).set({
           'name': name,
           'email': email,
           'ImageUrl': '',
@@ -48,14 +47,14 @@ class AuthServices {
   static Future<void> addPatient(
       BuildContext context, String name, String email, String password) async {
     try {
-      AuthResult authResult = await _auth.createUserWithEmailAndPassword(
+      UserCredential authResult = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      FirebaseUser signedInUser = authResult.user;
+      User signedInUser = authResult.user;
       if (signedInUser != null) {
         String token = await _messaging.getToken();
-        _firestore.collection('/patient').document(signedInUser.uid).setData({
+        _firestore.collection('/patient').doc(signedInUser.uid).set({
           'name': name,
           'email': email,
           'ImageUrl': '',
@@ -83,11 +82,11 @@ class AuthServices {
   static Future<void> signUp(
       BuildContext context, String email, String password) async {
     try {
-      AuthResult authResult = await _auth.createUserWithEmailAndPassword(
+      UserCredential authResult = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      FirebaseUser signedInUser = authResult.user;
+      User signedInUser = authResult.user;
     } on PlatformException catch (err) {
       throw (err);
     }
@@ -102,22 +101,22 @@ class AuthServices {
   }
 
   static Future<void> removeToken() async {
-    final currentUser = await _auth.currentUser();
-    await usersRef
-        .document(currentUser.uid)
-        .setData({'token': ''}, merge: true);
+    final currentUser = await _auth.currentUser;
+    await usersRef.doc(currentUser.uid)
+        // .setData({'token': ''}, merge: true);
+        .update({'token': ''});
   }
 
   static Future<void> updateToken() async {
-    final currentUser = await _auth.currentUser();
+    final currentUser = await _auth.currentUser;
     final token = await _messaging.getToken();
-    final userDoc = await usersRef.document(currentUser.uid).get();
+    final userDoc = await usersRef.doc(currentUser.uid).get();
     if (userDoc.exists) {
       UserSrc user = UserSrc.fromDoc(userDoc);
       if (token != user.token) {
-        usersRef
-            .document(currentUser.uid)
-            .setData({'token': token}, merge: true);
+        usersRef.doc(currentUser.uid)
+            // .setData({'token': ''}, merge: true);
+            .update({'token': ''});
       }
     }
   }
@@ -125,7 +124,7 @@ class AuthServices {
   static Future<void> updateTokenWithUser(UserSrc user) async {
     final token = await _messaging.getToken();
     if (token != user.token) {
-      await usersRef.document(user.id).updateData({'token': token});
+      await usersRef.doc(user.id).update({'token': token});
     }
   }
 

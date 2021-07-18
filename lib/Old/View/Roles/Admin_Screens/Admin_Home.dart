@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mh_care/Model/Services/Size_helper.dart';
-import 'package:mh_care/Model/Services/auth_Services.dart';
+// import 'package:mh_care/Model/Services/Size_helper.dart';
+// import 'package:mh_care/Model/Services/auth_Services.dart';
+import 'package:mh_care/Old/Model/Services/Size_helper.dart';
+import 'package:mh_care/Old/Model/Services/auth_Services.dart';
 import 'package:mh_care/View/Initial_Screens/splash_Screen.dart';
 import 'package:mh_care/View/Roles/Admin_Screens/add_Book.dart';
 import 'package:mh_care/View/Roles/User_Screens/Get_Books.dart';
@@ -17,9 +19,9 @@ class AdminHome extends StatefulWidget {
 
 class _AdminHomeState extends State<AdminHome> {
   Stream<DocumentSnapshot> provideDocumentFieldStream() {
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection('admin')
-        .document(widget.currentUserId)
+        .doc(widget.currentUserId)
         .snapshots();
   }
 
@@ -159,7 +161,7 @@ class _AdminHomeState extends State<AdminHome> {
                 return CircularProgressIndicator();
               }
               if (snapshot.hasData) {
-                Map<String, dynamic> documentFields = snapshot.data.data;
+                Map<String, dynamic> documentFields = snapshot.data.data();
 
                 return getData(documentFields, _height);
               }

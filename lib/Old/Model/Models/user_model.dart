@@ -34,7 +34,7 @@ class UserSrc {
 
   factory UserSrc.fromDoc(DocumentSnapshot doc) {
     return UserSrc(
-      id: doc.documentID,
+      id: doc.id,
       name: doc['name'],
       profileImageUrl: doc['profileImageUrl'],
       email: doc['email'],

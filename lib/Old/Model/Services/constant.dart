@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
 
-final _firestore = Firestore.instance;
+final _firestore = FirebaseFirestore.instance;
 final storageRef = FirebaseStorage.instance.ref();
 const kAdminUId = 'Edenik';
 final usersRef = _firestore.collection('users');

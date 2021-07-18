@@ -22,9 +22,9 @@ class _BookListState extends State<BookList> {
           title: Text('Books List'),
         ),
         body: new StreamBuilder<QuerySnapshot>(
-            stream: Firestore.instance
+            stream: FirebaseFirestore.instance
                 .collection("books")
-                .document('${widget.doc.documentID}')
+                .doc('${widget.doc.id}')
                 .collection('Books')
                 .snapshots(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {

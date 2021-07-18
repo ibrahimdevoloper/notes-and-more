@@ -1,11 +1,10 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mh_care/Model/Services/Size_helper.dart';
+// import 'package:mh_care/Model/Services/Size_helper.dart';
+import 'package:mh_care/Old/Model/Services/Size_helper.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AddBook extends StatefulWidget {
@@ -141,22 +140,22 @@ class _AddBookState extends State<AddBook> {
             if (_nameValidate == false &&
                 _categoryValidate == false &&
                 imageUrl != null) {
-              Firestore.instance
+              FirebaseFirestore.instance
                   .collection('books')
-                  .document('${bookCategoryController.text}')
-                  .setData(
+                  .doc('${bookCategoryController.text}')
+                  .set(
                 {
                   'category': bookCategoryController.text,
                 },
               ).then((value) {
                 //Do your stuff.
               });
-              Firestore.instance
+              FirebaseFirestore.instance
                   .collection('books')
-                  .document('${bookCategoryController.text}')
+                  .doc('${bookCategoryController.text}')
                   .collection('Books')
-                  .document()
-                  .setData(
+                  .doc()
+                  .set(
                 {
                   'bookName': bookNameController.text,
                   'category': bookCategoryController.text,
@@ -203,9 +202,9 @@ class _AddBookState extends State<AddBook> {
   }
 
   Stream<DocumentSnapshot> provideDocumentFieldStream() {
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection('admin')
-        .document(widget.currentUserId)
+        .doc(widget.currentUserId)
         .snapshots();
   }
 
@@ -232,7 +231,7 @@ class _AddBookState extends State<AddBook> {
                   return CircularProgressIndicator();
                 }
                 if (snapshot.hasData) {
-                  Map<String, dynamic> documentFields = snapshot.data.data;
+                  Map<String, dynamic> documentFields = snapshot.data.data();
 
                   return getData(_height, documentFields);
                 }
@@ -260,7 +259,9 @@ class _AddBookState extends State<AddBook> {
             .ref()
             .child('images/${DateTime.now().toString()}')
             .putFile(file)
-            .onComplete;
+            .whenComplete((){
+              // TODO: fill the function
+        });
         var downloadUrl = await snapshot.ref.getDownloadURL();
         setState(() {
           imageUrl = downloadUrl;
@@ -315,7 +316,8 @@ class _AddBookState extends State<AddBook> {
         ),
         GestureDetector(
           onTap: () {
-            getPdfAndUpload();
+            //TODO: modify this
+            // getPdfAndUpload();
           },
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 13),
@@ -381,29 +383,30 @@ class _AddBookState extends State<AddBook> {
     );
   }
 
-  Future getPdfAndUpload() async {
-    var rng = new Random();
-    String randomName = "";
-    for (var i = 0; i < 20; i++) {
-      print(rng.nextInt(100));
-      randomName += rng.nextInt(100).toString();
-    }
-    File file = await FilePicker.getFile(
-        type: FileType.custom, allowedExtensions: ['pdf']);
-    String fileName = '${randomName}.pdf';
-    print(fileName);
-    print('${file.readAsBytesSync()}');
-    savePdf(file.readAsBytesSync(), fileName);
-  }
-
-  Future savePdf(List<int> asset, String name) async {
-    StorageReference reference = FirebaseStorage.instance.ref().child(name);
-    StorageUploadTask uploadTask = reference.putData(asset);
-    String url = await (await uploadTask.onComplete).ref.getDownloadURL();
-    print(url);
-    documentFileUpload(url);
-    return url;
-  }
+  //TODO: modify this
+  // Future getPdfAndUpload() async {
+  //   var rng = new Random();
+  //   String randomName = "";
+  //   for (var i = 0; i < 20; i++) {
+  //     print(rng.nextInt(100));
+  //     randomName += rng.nextInt(100).toString();
+  //   }
+  //   File file = await FilePicker.getFile(
+  //       type: FileType.custom, allowedExtensions: ['pdf']);
+  //   String fileName = '${randomName}.pdf';
+  //   print(fileName);
+  //   print('${file.readAsBytesSync()}');
+  //   savePdf(file.readAsBytesSync(), fileName);
+  // }
+  //
+  // Future savePdf(List<int> asset, String name) async {
+  //   Reference reference = FirebaseStorage.instance.ref().child(name);
+  //   UploadTask uploadTask = reference.putData(asset);
+  //   String url = await uploadTask.ref.getDownloadURL();
+  //   print(url);
+  //   documentFileUpload(url);
+  //   return url;
+  // }
 
   void documentFileUpload(String str) {
     setState(() {

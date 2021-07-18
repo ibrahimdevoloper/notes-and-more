@@ -24,7 +24,7 @@ class GetBooksCategory extends StatelessWidget {
                   'assets/books.png',
                 ))),
         child: new StreamBuilder<QuerySnapshot>(
-            stream: Firestore.instance.collection("books").snapshots(),
+            stream: FirebaseFirestore.instance.collection("books").snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) return new Text("There is no Books");
@@ -35,7 +35,7 @@ class GetBooksCategory extends StatelessWidget {
   }
 
   getBooksList(AsyncSnapshot<QuerySnapshot> snapshot, BuildContext context) {
-    return snapshot.data.documents
+    return snapshot.data.docs
         .map((doc) => GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -63,7 +63,7 @@ class GetBooksCategory extends StatelessWidget {
                       ),
                     ),
                     title: new Text(
-                      doc.documentID,
+                      doc.id,
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w400,

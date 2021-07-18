@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mh_care/Model/Services/Size_helper.dart';
-import 'package:mh_care/Model/Services/auth_Services.dart';
+// import 'package:mh_care/Model/Services/Size_helper.dart';
+// import 'package:mh_care/Model/Services/auth_Services.dart';
+import 'package:mh_care/Old/Model/Services/Size_helper.dart';
+import 'package:mh_care/Old/Model/Services/auth_Services.dart';
 import 'package:mh_care/main.dart';
 
 import 'About_US.dart';
@@ -147,9 +149,9 @@ class _UserHomeState extends State<UserHome> {
   }
 
   Stream<DocumentSnapshot> provideDocumentFieldStream() {
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection('user')
-        .document(widget.currentUserId)
+        .doc(widget.currentUserId)
         .snapshots();
   }
 
@@ -170,7 +172,7 @@ class _UserHomeState extends State<UserHome> {
                   return CircularProgressIndicator();
                 }
                 if (snapshot.hasData) {
-                  Map<String, dynamic> documentFields = snapshot.data.data;
+                  Map<String, dynamic> documentFields = snapshot.data.data();
 
                   return getData(_height, documentFields);
                 }

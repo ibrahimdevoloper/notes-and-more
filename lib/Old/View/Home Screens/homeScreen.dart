@@ -15,9 +15,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String userRole = '';
 
   checkUserRole() async {
-    final snapShot = await Firestore.instance
+    final snapShot = await FirebaseFirestore.instance
         .collection('admin')
-        .document(widget.currentUserId)
+        .doc(widget.currentUserId)
         .get();
 
     if (snapShot.exists) {
@@ -26,9 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
 
-    final psnapShot = await Firestore.instance
+    final psnapShot = await FirebaseFirestore.instance
         .collection('user')
-        .document(widget.currentUserId)
+        .doc(widget.currentUserId)
         .get();
     if (psnapShot.exists) {
       setState(() {
