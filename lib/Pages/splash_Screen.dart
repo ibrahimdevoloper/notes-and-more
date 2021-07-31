@@ -21,7 +21,7 @@ class SplashScreenState extends State<SplashScreen> {
                 child: Column(
                   children: [
                     Image.asset(
-                      'assets/logo.png',
+                      'assets/images/appIcon.png',
                       height: 300,
                       width: 300,
                     ),
@@ -31,9 +31,10 @@ class SplashScreenState extends State<SplashScreen> {
                     Text(
                       'Notes And More',
                       style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 25),
+                        color: Colors.black,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 25,
+                      ),
                     ),
                   ],
                 ),

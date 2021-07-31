@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 // import 'package:mh_care/Model/Models/user_data.dart';
-import 'package:mh_care/Old/Model/Models/user_data.dart';
-import 'package:mh_care/Old/Model/Models/user_model.dart';
+import 'package:mh_care/Model/Models/user_data.dart';
+import 'package:mh_care/Model/Models/user_model.dart';
+import 'package:mh_care/Model/UserData/UserData.dart';
 import 'constant.dart';
 import 'package:provider/provider.dart';
 // import 'package:mh_care/Model/Models/user_model.dart';
-import 'package:mh_care/Old/Model/Services/globals.dart' as global;
+import 'package:mh_care/Model/Services/globals.dart' as global;
 
 class AuthServices {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -26,16 +27,29 @@ class AuthServices {
       User signedInUser = authResult.user;
       if (signedInUser != null) {
         String token = await _messaging.getToken();
-        _firestore.collection('/${global.sRole}').doc(signedInUser.uid).set({
-          'name': name,
-          'email': email,
-          'ImageUrl': '',
-          'token': token,
-          'details': '',
-          'timeCreated': Timestamp.now(),
-        });
+        _firestore.collection('users').doc(signedInUser.uid).set(
+            UserData(
+                createdAt: Timestamp.now().toDate(),
+                numberOfShares: 0,
+                numberOfLikes: 0,
+                numberOfFavoriteBooks: 0,
+                role: UserData.USER_ROLE_CUSTOMER,
+                email: email,
+                uid: signedInUser.uid,
+                firebaseMessagingToken: token
+            ).toJson()
+
+        //     {
+        //   'name': name,
+        //   'email': email,
+        //   'ImageUrl': '',
+        //   'token': token,
+        //   'details': '',
+        //   'timeCreated': Timestamp.now(),
+        // }
+        );
       }
-      Provider.of<GetUserData>(context, listen: false).currentUserId =
+      Provider.of<UserData>(context, listen: false).uid =
           signedInUser.uid;
 
       Navigator.pop(context);
@@ -66,7 +80,7 @@ class AuthServices {
           'timeCreated': Timestamp.now(),
         });
       }
-      Provider.of<GetUserData>(context, listen: false).currentUserId =
+      Provider.of<UserData>(context, listen: false).uid =
           signedInUser.uid;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

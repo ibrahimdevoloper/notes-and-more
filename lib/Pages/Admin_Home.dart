@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:mh_care/Model/Services/Size_helper.dart';
 // import 'package:mh_care/Model/Services/auth_Services.dart';
-import 'package:mh_care/Old/Model/Services/Size_helper.dart';
-import 'package:mh_care/Old/Model/Services/auth_Services.dart';
-import 'package:mh_care/View/Initial_Screens/splash_Screen.dart';
-import 'package:mh_care/View/Roles/Admin_Screens/add_Book.dart';
-import 'package:mh_care/View/Roles/User_Screens/Get_Books.dart';
+import 'package:mh_care/Model/Services/Size_helper.dart';
+import 'package:mh_care/Model/Services/auth_Services.dart';
+import 'package:mh_care/Pages/add_Book.dart';
+import 'package:mh_care/Pages/splash_Screen.dart';
+import 'package:mh_care/Pages/Get_Books.dart';
 import 'package:mh_care/main.dart';
 
 class AdminHome extends StatefulWidget {

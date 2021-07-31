@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mh_care/View/Roles/Admin_Screens/Admin_Home.dart';
-import 'package:mh_care/View/Roles/User_Screens/User_Home.dart';
+import 'package:mh_care/Pages/Admin_Home.dart';
+import 'package:mh_care/Pages/User_Home.dart';
 
 class HomeScreen extends StatefulWidget {
   static final String id = 'home_screen';
