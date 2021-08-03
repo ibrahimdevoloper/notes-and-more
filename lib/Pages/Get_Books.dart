@@ -22,7 +22,7 @@ class GetBooksCategory extends StatelessWidget {
                     Colors.black.withOpacity(0.2), BlendMode.dstIn),
                 alignment: Alignment.bottomCenter,
                 image: AssetImage(
-                  'assets/books.png',
+                  'assets/oldImages/books.png',
                 ))),
         child: new StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance.collection("books").snapshots(),
@@ -59,7 +59,7 @@ class GetBooksCategory extends StatelessWidget {
                         borderRadius: BorderRadius.circular(5),
                         image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: AssetImage('assets/open-book.png'),
+                          image: AssetImage('assets/oldImages/open-book.png'),
                         ),
                       ),
                     ),

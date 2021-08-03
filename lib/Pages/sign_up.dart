@@ -108,7 +108,7 @@ class SignUpPage extends StatelessWidget {
                         SizedBox(
                           height: 15,
                         ),
-                        GetX<SignUpGetXController>(
+                        GetBuilder<SignUpGetXController>(
                           init: controller,
                           builder: (controller) {
                             return TextFormField(
@@ -263,7 +263,7 @@ class SignUpPage extends StatelessWidget {
                               onChanged: (value) {
                                 controller.confirmPassword = value;
                                 controller.isConfirmPasswordError =
-                                    controller.validatePassword();
+                                    !controller.validatePassword();
                               },
                             );
                           },
@@ -304,13 +304,18 @@ class SignUpPage extends StatelessWidget {
                           init: controller,
                           builder: (controller) {
                             if (controller.isLoading)
-                              CircularProgressIndicator();
+                              return CircularProgressIndicator();
                             else
                               return Container(
                                 height: 50,
                                 width: MediaQuery.of(context).size.width * 0.80,
                                 child: FlatButton(
-                                  onPressed: () => controller.signUpUser(),
+                                  onPressed: () {
+                                    if (!controller.validator())
+                                    controller.signUpUser();
+                                    else
+                                      Get.snackbar("Form Error", "Please Check Your Fields");
+                                  },
                                   color: Colors.lightBlueAccent,
                                   shape: RoundedRectangleBorder(
                                       borderRadius:

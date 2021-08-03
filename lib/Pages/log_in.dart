@@ -172,7 +172,7 @@ class LoginPage extends StatelessWidget {
                             width: MediaQuery.of(context).size.width * 0.80,
                             child: FlatButton(
                               onPressed: () {
-                                if (controller.validator())
+                                if (!controller.validator())
                                   controller.logIn();
                                 else Get.snackbar("Error", "Please Enter Correct Info");
                               },

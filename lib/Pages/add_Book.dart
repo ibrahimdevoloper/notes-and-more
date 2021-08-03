@@ -34,7 +34,7 @@ class _AddBookState extends State<AddBook> {
                   fit: BoxFit.cover,
                   colorFilter: new ColorFilter.mode(
                       Colors.black.withOpacity(0.4), BlendMode.darken),
-                  image: AssetImage('assets/thom.jpg'))),
+                  image: AssetImage('assets/oldImages/thom.jpg'))),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -48,7 +48,7 @@ class _AddBookState extends State<AddBook> {
                       border: Border.all(width: 2, color: Colors.white),
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: AssetImage('assets/user.png'))),
+                          image: AssetImage('assets/oldImages/user.png'))),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: _height * .01),

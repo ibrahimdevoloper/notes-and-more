@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
+import 'package:mh_care/Controller/SharedPreferencesGetXController.dart';
 import 'package:mh_care/Model/Services/auth_Services.dart';
 import 'package:mh_care/Model/UserData/UserData.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpGetXController extends GetxController {
   // final _obj = ''.obs;
@@ -28,6 +30,8 @@ class SignUpGetXController extends GetxController {
 
   signUpUser() async {
     try {
+      _isLoading = true;
+      update();
       var authResult = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _email,
         password: _password,
@@ -35,7 +39,7 @@ class SignUpGetXController extends GetxController {
       User signedInUser = authResult.user;
       if (signedInUser != null) {
         String token = await FirebaseMessaging.instance.getToken();
-        FirebaseFirestore.instance.collection('users').doc(signedInUser.uid).set(
+        await FirebaseFirestore.instance.collection('users').doc(signedInUser.uid).set(
             UserData(
                 createdAt: Timestamp.now().toDate(),
                 numberOfShares: 0,
@@ -50,6 +54,7 @@ class SignUpGetXController extends GetxController {
               name: _name
             ).toJson()
 
+
           //     {
           //   'name': name,
           //   'email': email,
@@ -59,22 +64,53 @@ class SignUpGetXController extends GetxController {
           //   'timeCreated': Timestamp.now(),
           // }
         );
+        SharedPreferencesGetXController prefController = Get.find();
+        SharedPreferences pref =prefController.pref;
+        // UserData userData = UserData.fromJson(userDataMap.data());
+        pref.setString(UserData.USER_ROLE, UserData.USER_ROLE_CUSTOMER);
+        pref.setString(UserData.USER_DETAILS, "");
+        pref.setString(UserData.USER_EMAIL, _email);
+        pref.setString(UserData.USER_IMAGE_URL, "");
+        pref.setString(UserData.USER_NAME, _name);
+        pref.setInt(UserData.USER_NUMBER_OF_FAVORITE_BOOKS,0);
+        pref.setInt(UserData.USER_NUMBER_OF_LIKES, 0);
+        pref.setInt(UserData.USER_NUMBER_OF_SHARES, 0);
+        pref.setString(UserData.USER_UID, signedInUser.uid);
+        _isLoading = false;
+        update();
+        Get.back();
       }
       // Provider.of<UserData>(context, listen: false).uid =
       //     signedInUser.uid;
 
       // Navigator.pop(context);
-      Get.back();
-    } on PlatformException catch (e) {
+
+    } on FirebaseAuthException catch (e) {
       // throw (err);
+      printError(info:e.message);
       Get.snackbar("Error", e.message);
+      _isLoading = false;
+      update();
+    }on Exception catch (e){
+      printError(info:e.toString());
+      Get.snackbar("Error", "Something Went Wrong while Signing up");
+      _isLoading = false;
+      update();
     }
   }
 
   bool validatePassword(){
+    if (_password!=null &&_confirmPassword!=null)
     return _password.compareTo(_confirmPassword)==0;
+    else {
+      _isPasswordError = true;
+      _isConfirmPasswordError = true;
+      update();
+      return false;
+    }
   }
 
+  //return error if there are any errors
   bool validator() {
     return _isEmailError || _isPasswordError || !validatePassword();
   }
@@ -117,6 +153,7 @@ class SignUpGetXController extends GetxController {
 
   set isConfirmPasswordError(value) {
     _isConfirmPasswordError = value;
+    update();
   }
 
   bool get isObscureTextConfirmPassword => _isObscureTextConfirmPassword;

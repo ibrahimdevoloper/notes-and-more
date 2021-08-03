@@ -30,6 +30,17 @@ class UserData {
   static const USER_ROLE_CUSTOMER="customer";
   static const USER_ROLE_ADMIN="admin";
 
+  static const USER_UID="uid";
+  static const USER_EMAIL="email";
+  static const USER_DETAILS="details";
+  static const USER_IMAGE_URL="imageUrl";
+  static const USER_NAME="name";
+  static const USER_ROLE="role";
+  static const USER_NUMBER_OF_FAVORITE_BOOKS="numberOfFavoriteBooks";
+  static const USER_NUMBER_OF_LIKES="numberOfLikes";
+  static const USER_NUMBER_OF_SHARES="numberOfShares";
+
+
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
   /// The constructor is named after the source class, in this case, User.
