@@ -1,14 +1,8 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mh_care/Controller/LoginGetXController.dart';
-
-// import 'package:mh_care/Model/Services/auth_Services.dart';
-import 'package:mh_care/Model/Services/auth_Services.dart';
 import 'package:mh_care/Pages/SignUpPage.dart';
-import 'package:toggle_switch/toggle_switch.dart';
-import 'package:mh_care/Model/Services/globals.dart' as global;
 
 class LoginPage extends StatelessWidget {
   static final String id = 'login_screen';
@@ -126,16 +120,13 @@ class LoginPage extends StatelessWidget {
                             fillColor: Color(0XFFF5F8FA),
                             filled: true,
                             enabledBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent),
+                              borderSide: BorderSide(color: Colors.transparent),
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent),
+                              borderSide: BorderSide(color: Colors.transparent),
                             ),
                             border: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent),
+                              borderSide: BorderSide(color: Colors.transparent),
                             ),
                             errorText: controller.isPasswordError
                                 ? 'Password must be at least 6 characters'
@@ -174,12 +165,13 @@ class LoginPage extends StatelessWidget {
                               onPressed: () {
                                 if (!controller.validator())
                                   controller.logIn();
-                                else Get.snackbar("Error", "Please Enter Correct Info");
+                                else
+                                  Get.snackbar(
+                                      "Error", "Please Enter Correct Info");
                               },
                               color: Colors.lightBlueAccent,
                               shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      new BorderRadius.circular(7.0),
+                                  borderRadius: new BorderRadius.circular(7.0),
                                   side: BorderSide(color: Colors.lightBlue)),
                               padding: const EdgeInsets.all(10.0),
                               child: Text(
@@ -227,9 +219,9 @@ class LoginPage extends StatelessWidget {
                           );
                       },
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.2,
-                    ),
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).size.height * 0.2,
+                    // ),
                   ],
                 )
               ],

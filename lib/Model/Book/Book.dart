@@ -12,9 +12,12 @@ class Book {
     this.bookName,
     this.details,
     this.imageUrl,
+    this.pdfUrl,
+    this.bookLikesList,
+    this.category,
+    this.categoryId,
     this.numberOfLikes,
     this.numberOfShares,
-    this.bookLikesList,
     this.createdAt,
   });
 

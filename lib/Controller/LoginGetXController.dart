@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 import 'package:mh_care/Controller/SharedPreferencesGetXController.dart';
-import 'package:mh_care/Model/Services/auth_Services.dart';
 import 'package:mh_care/Model/UserData/UserData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,28 +30,36 @@ class LoginGetXController extends GetxController {
           .signInWithEmailAndPassword(email: _email, password: _password);
       //save user data in the device like shared pref
       SharedPreferencesGetXController prefController = Get.find();
-      SharedPreferences pref =prefController.pref;
-      var userDataMap =await FirebaseFirestore.instance.collection("users").doc(userInfo.user.uid).get();
+      SharedPreferences pref = prefController.pref;
+      var userDataMap = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userInfo.user.uid)
+          .get();
       UserData userData = UserData.fromJson(userDataMap.data());
       pref.setString(UserData.USER_ROLE, userData.role);
       pref.setString(UserData.USER_DETAILS, userData.details);
       pref.setString(UserData.USER_EMAIL, userData.email);
       pref.setString(UserData.USER_IMAGE_URL, userData.imageUrl);
       pref.setString(UserData.USER_NAME, userData.name);
-      pref.setInt(UserData.USER_NUMBER_OF_FAVORITE_BOOKS, userData.numberOfFavoriteBooks);
+      pref.setInt(UserData.USER_NUMBER_OF_FAVORITE_BOOKS,
+          userData.numberOfFavoriteBooks);
       pref.setInt(UserData.USER_NUMBER_OF_LIKES, userData.numberOfLikes);
       pref.setInt(UserData.USER_NUMBER_OF_SHARES, userData.numberOfShares);
-      pref.setString(UserData.USER_UID, userData.uid);
+      pref.setString(UserData.USER_UID, userInfo.user.uid);
       _isLoading = false;
       update();
     } on FirebaseAuthException catch (e) {
       // throw (err);
-      printError(info:e.message);
-      Get.snackbar("Error", e.message);
+      printError(info: e.message);
+      if (e.message.contains("403")) {
+        Get.snackbar("Error", "Check Your Connection");
+      } else {
+        Get.snackbar("Error", e.message);
+      }
       _isLoading = false;
       update();
-    }on Exception catch (e){
-      printError(info:e.toString());
+    } on Exception catch (e) {
+      printError(info: e.toString());
       Get.snackbar("Error", "Something Went Wrong while Logging in");
       _isLoading = false;
       update();
