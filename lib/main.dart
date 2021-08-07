@@ -9,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mh_care/Controller/SharedPreferencesGetXController.dart';
 import 'package:mh_care/Model/UserData/UserData.dart';
 import 'package:mh_care/Pages/Admin_Home.dart';
-import 'package:mh_care/Pages/User_Home.dart';
+import 'package:mh_care/Pages/UserHomePage.dart';
 import 'package:mh_care/Pages/splash_Screen.dart';
 
 // import 'package:mh_care/Pages/splash_Screen.dart';
@@ -17,7 +17,7 @@ import 'package:mh_care/Pages/splash_Screen.dart';
 
 // import 'package:mh_care/Model/Models/user_data.dart';
 // import 'package:mh_care/View/Home%20Screens/homeScreen.dart';
-// import 'package:mh_care/View/Initial_Screens/sign_up.dart';
+// import 'package:mh_care/View/Initial_Screens/SignUpPage.dart';
 // import 'package:mh_care/View/Initial_Screens/splash_Screen.dart';
 import 'package:provider/provider.dart';
 
@@ -157,7 +157,7 @@ class _MyAppState extends State<MyApp> {
                           if (pref.getString(UserData.USER_ROLE).compareTo(UserData.USER_ROLE_ADMIN)==0)
                             return AdminHome();
                           else
-                            return UserHome(pref.getString(UserData.USER_UID));
+                            return UserHomePage(pref.getString(UserData.USER_UID));
                         }
                       } else {
                         return LoginPage();

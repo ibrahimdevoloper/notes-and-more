@@ -6,7 +6,7 @@ import 'package:mh_care/Controller/LoginGetXController.dart';
 
 // import 'package:mh_care/Model/Services/auth_Services.dart';
 import 'package:mh_care/Model/Services/auth_Services.dart';
-import 'package:mh_care/Pages/sign_up.dart';
+import 'package:mh_care/Pages/SignUpPage.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:mh_care/Model/Services/globals.dart' as global;
 

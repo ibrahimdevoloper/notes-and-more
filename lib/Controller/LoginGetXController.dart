@@ -26,6 +26,7 @@ class LoginGetXController extends GetxController {
     // if (_formKey.currentState.validate()) {
 
     _isLoading = true;
+    update();
     // _formKey.currentState.save();
     //Logging the user
     try {
@@ -46,6 +47,7 @@ class LoginGetXController extends GetxController {
       pref.setInt(UserData.USER_NUMBER_OF_SHARES, userData.numberOfShares);
       pref.setString(UserData.USER_UID, userData.uid);
       _isLoading = false;
+      update();
     } on FirebaseAuthException catch (e) {
       // throw (err);
       printError(info:e.message);
@@ -54,7 +56,7 @@ class LoginGetXController extends GetxController {
       update();
     }on Exception catch (e){
       printError(info:e.toString());
-      Get.snackbar("Error", "Something went Wrong while Logging in");
+      Get.snackbar("Error", "Something Went Wrong while Logging in");
       _isLoading = false;
       update();
     }

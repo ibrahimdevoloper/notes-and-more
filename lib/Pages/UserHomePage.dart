@@ -10,16 +10,16 @@ import 'package:mh_care/main.dart';
 
 
 import 'Contact_Us.dart';
-import 'Get_Books.dart';
+import 'BooksCategoryPage.dart';
 
-class UserHome extends StatefulWidget {
+class UserHomePage extends StatefulWidget {
   final String currentUserId;
-  UserHome(this.currentUserId);
+  UserHomePage(this.currentUserId);
   @override
-  _UserHomeState createState() => _UserHomeState();
+  _UserHomePageState createState() => _UserHomePageState();
 }
 
-class _UserHomeState extends State<UserHome> {
+class _UserHomePageState extends State<UserHomePage> {
   final replyController = TextEditingController();
   final trackingController = TextEditingController();
 
@@ -78,7 +78,7 @@ class _UserHomeState extends State<UserHome> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => GetBooksCategory()),
+              MaterialPageRoute(builder: (context) => BooksCategoryPage()),
             );
           },
         ),

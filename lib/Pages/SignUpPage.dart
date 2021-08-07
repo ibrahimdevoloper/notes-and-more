@@ -10,6 +10,8 @@ import 'package:toggle_switch/toggle_switch.dart';
 class SignUpPage extends StatelessWidget {
   static final String id = 'signup_screen';
 
+  //TODO: check it works after copying
+  //TODO: fix confirm password eye
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(SignUpGetXController());

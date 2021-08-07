@@ -7,14 +7,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mh_care/Model/Services/Size_helper.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class AddBook extends StatefulWidget {
+class AddBookPage extends StatefulWidget {
   final String currentUserId;
-  AddBook(this.currentUserId);
+  AddBookPage(this.currentUserId);
   @override
-  _AddBookState createState() => _AddBookState();
+  _AddBookPageState createState() => _AddBookPageState();
 }
 
-class _AddBookState extends State<AddBook> {
+class _AddBookPageState extends State<AddBookPage> {
   final bookNameController = TextEditingController();
   final bookCategoryController = TextEditingController();
   bool _nameValidate = false;
@@ -203,7 +203,8 @@ class _AddBookState extends State<AddBook> {
 
   Stream<DocumentSnapshot> provideDocumentFieldStream() {
     return FirebaseFirestore.instance
-        .collection('admin')
+        // .collection('admin')
+        .collection('user')
         .doc(widget.currentUserId)
         .snapshots();
   }

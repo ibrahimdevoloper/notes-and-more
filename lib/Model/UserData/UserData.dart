@@ -10,6 +10,7 @@ class UserData {
     this.createdAt,this.firebaseMessagingToken,this.name,this.details,this.imageUrl,
   });
 
+  @JsonKey(ignore: true)
   String uid;//user Id in firebase
   String email;
   String name;

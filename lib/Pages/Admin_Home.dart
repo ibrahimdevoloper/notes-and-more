@@ -5,8 +5,8 @@ import 'package:mh_care/Controller/SharedPreferencesGetXController.dart';
 import 'package:mh_care/Model/Services/Size_helper.dart';
 import 'package:mh_care/Model/Services/auth_Services.dart';
 import 'package:mh_care/Model/UserData/UserData.dart';
-import 'package:mh_care/Pages/add_Book.dart';
-import 'package:mh_care/Pages/Get_Books.dart';
+import 'package:mh_care/Pages/AddBookPage.dart';
+import 'package:mh_care/Pages/BooksCategoryPage.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -77,7 +77,7 @@ class AdminHome extends StatelessWidget {
               ListTile(
                 tileColor: Colors.transparent,
                 title: Text(
-                  'See All Books',
+                  'Display Category',
                   style: TextStyle(fontSize: _height * 0.023),
                 ),
                 trailing: Icon(
@@ -85,7 +85,7 @@ class AdminHome extends StatelessWidget {
                   color: Colors.black,
                 ),
                 onTap: () {
-                  Get.to(()=>GetBooksCategory());
+                  Get.to(()=>BooksCategoryPage());
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(builder: (context) => GetBooksCategory()),
@@ -113,7 +113,7 @@ class AdminHome extends StatelessWidget {
                   // TODO: get user uid from pref
                   SharedPreferencesGetXController prefController = Get.find();
                   SharedPreferences pref =prefController.pref;
-                  Get.to(()=>AddBook(pref.getString(UserData.USER_UID)));
+                  Get.to(()=>AddBookPage(pref.getString(UserData.USER_UID)));
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(
@@ -141,7 +141,7 @@ class AdminHome extends StatelessWidget {
                   ),
                   onTap: () {
                     AuthServices.logout();
-                    Get.to(()=>GetBooksCategory());
+                    Get.to(()=>BooksCategoryPage());
 
                     // Navigator.pushReplacement(
                     //     context,

@@ -1,36 +1,30 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'UserData.dart';
+part of 'Category.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-UserData _$UserDataFromJson(Map<String, dynamic> json) {
-  return UserData(
-    email: json['email'] as String,
-    role: json['role'] as String ?? 'customer',
-    numberOfFavoriteBooks: json['numberOfFavoriteBooks'] as int ?? 0,
+Category _$CategoryFromJson(Map<String, dynamic> json) {
+  return Category(
+    name: json['name'] as String,
+    details: json['details'] as String,
+    imageUrl: json['imageUrl'] as String,
+    numberOfBooks: json['numberOfBooks'] as int ?? 0,
     numberOfLikes: json['numberOfLikes'] as int ?? 0,
     numberOfShares: json['numberOfShares'] as int ?? 0,
     createdAt:
         const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
-    firebaseMessagingToken: json['firebaseMessagingToken'] as String,
-    name: json['name'] as String,
-    details: json['details'] as String,
-    imageUrl: json['imageUrl'] as String,
   );
 }
 
-Map<String, dynamic> _$UserDataToJson(UserData instance) => <String, dynamic>{
-      'email': instance.email,
+Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
       'name': instance.name,
       'details': instance.details,
       'imageUrl': instance.imageUrl,
-      'role': instance.role,
-      'numberOfFavoriteBooks': instance.numberOfFavoriteBooks,
+      'numberOfBooks': instance.numberOfBooks,
       'numberOfLikes': instance.numberOfLikes,
       'numberOfShares': instance.numberOfShares,
-      'firebaseMessagingToken': instance.firebaseMessagingToken,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),
     };
