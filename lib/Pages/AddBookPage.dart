@@ -177,7 +177,7 @@ class AddBookPage extends StatelessWidget {
 
                     return DropdownButton<String>(
                       isExpanded: true,
-                      value: controller.category.id,
+                      value: controller.category!=null?controller.category.id:null,
                       hint: Text("Please Select Category"),
                       items: controller.categories.map((e){
                         print("${e.name}|${e.id}");
