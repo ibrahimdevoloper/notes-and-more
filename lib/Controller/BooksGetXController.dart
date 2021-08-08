@@ -4,11 +4,11 @@ import 'package:mh_care/Model/Book/Book.dart';
 import 'package:mh_care/Model/Category/Category.dart';
 
 class BooksGetXController extends GetxController {
-  String _categoryId="";
+  Category _category;
   List<Book> books;
 
 
-  BooksGetXController({String categoryId}):this._categoryId=categoryId;
+  BooksGetXController({Category category}):this._category=category;
 
   Stream<List<Book>> getBookStream() {
     return FirebaseFirestore.instance

@@ -1,34 +1,62 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
+import 'package:mh_care/Controller/BooksCategoryGetXController.dart';
 import 'package:mh_care/Model/Book/Book.dart';
+import 'package:mh_care/Model/Category/Category.dart';
 
 class AddBooksGetXController extends GetxController {
   bool _isLoading = false;
+  bool _isCategoryLoading = false;
 
   String _name;
-  String _category;
-  String _categoryId;
+  Category _category;
+  String _selectedCategoryId;
   String _pdfUrl;
-  String _imageUrl;
+  String _coverImageUrl;
+  String _coverImagePath;
+
+  List<Category> _categories;
 
   bool _isNameError = false;
   bool _isPdfUrlError = false;
+  bool _isCoverImageUrl = false;
+
+
+  AddBooksGetXController(Category category) {
+    this._category = category;
+    this._selectedCategoryId = this._category.id;
+  }
+
+  @override
+  void onInit() {
+    BooksCategoryGetXController categoryController = Get.find();
+    // printInfo(info: categoryController.categories.toString());
+    _categories = categoryController.categories;
+  }
 
   addBook() async {
     try {
       _isLoading = true;
       update();
+      var storageRef =
+      FirebaseStorage.instance.ref().child("Books").child(name);
+      File recordFile = File(_coverImagePath);
+      var recordRef = await storageRef.child("note.acc").putFile(recordFile);
+      _coverImageUrl = await recordRef.ref.getDownloadURL();
       await FirebaseFirestore.instance.collection('books').doc().set(Book(
-            createdAt: Timestamp.now().toDate(),
-            numberOfShares: 0,
-            numberOfLikes: 0,
-            imageUrl: _imageUrl,
-            details: "",
-            pdfUrl: _pdfUrl,
-            category: _category,
-            categoryId: _categoryId,
-            bookName: _name,
-          ).toJson());
+        createdAt: Timestamp.now().toDate(),
+        numberOfShares: 0,
+        numberOfLikes: 0,
+        imageUrl: _coverImageUrl,
+        details: "",
+        pdfUrl: _pdfUrl,
+        category: _category.name,
+        categoryId: _category.id,
+        bookName: _name,
+      ).toJson());
       _isLoading = false;
       update();
       Get.back();
@@ -63,11 +91,21 @@ class AddBooksGetXController extends GetxController {
   //     return false;
   //   }
   // }
+  //return true if there are any errors in pdf url
+  bool pdfUrlValidator() {
+    if (_pdfUrl == null)
+      return true;
+    else
+    if (!RegExp(r"https://www.dropbox.com/\S+?(?=dl=)dl=1").hasMatch(_pdfUrl))
+      return true;
+    else
+      return false;
+  }
 
   //return true if there are any errors
   bool validator() {
     isNameError = _name == null;
-    isPdfUrlError = _pdfUrl == null;
+    isPdfUrlError = pdfUrlValidator();
     return _name == null || _pdfUrl == null;
   }
 
@@ -85,10 +123,10 @@ class AddBooksGetXController extends GetxController {
     update();
   }
 
-  String get imageUrl => _imageUrl;
+  String get imageUrl => _coverImageUrl;
 
   set imageUrl(String value) {
-    _imageUrl = value;
+    _coverImageUrl = value;
   }
 
   String get pdfUrl => _pdfUrl;
@@ -97,17 +135,9 @@ class AddBooksGetXController extends GetxController {
     _pdfUrl = value;
   }
 
-  String get categoryId => _categoryId;
 
-  set categoryId(String value) {
-    _categoryId = value;
-  }
 
-  String get category => _category;
 
-  set category(String value) {
-    _category = value;
-  }
 
   String get name => _name;
 
@@ -120,5 +150,47 @@ class AddBooksGetXController extends GetxController {
   set isLoading(bool value) {
     _isLoading = value;
     update();
+  }
+
+  bool get isCoverImageUrl => _isCoverImageUrl;
+
+  set isCoverImageUrl(bool value) {
+    _isCoverImageUrl = value;
+  }
+
+  String get coverImageUrl => _coverImageUrl;
+
+  set coverImageUrl(String value) {
+    _coverImageUrl = value;
+  }
+
+  bool get isCategoryLoading => _isCategoryLoading;
+
+  set isCategoryLoading(bool value) {
+    _isCategoryLoading = value;
+  }
+
+  List<Category> get categories => _categories;
+
+  set categories(List<Category> value) {
+    _categories = value;
+  }
+
+  String get coverImagePath => _coverImagePath;
+
+  set coverImagePath(String value) {
+    _coverImagePath = value;
+  }
+
+  Category get category => _category;
+
+  set category(Category value) {
+    _category = value;
+  }
+
+  String get selectedCategoryId => _selectedCategoryId;
+
+  set selectedCategoryId(String value) {
+    _selectedCategoryId = value;
   }
 }

@@ -143,7 +143,8 @@ class CategoryListItem extends StatelessWidget {
         //   context,
         //   MaterialPageRoute(builder: (context) => BookList(doc)),
         // );
-        Get.to(() => BooksPage(categoryId: _category.id));
+        print("CategoryListItem:${_category.name}");
+        Get.to(() => BooksPage(category: _category));
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),

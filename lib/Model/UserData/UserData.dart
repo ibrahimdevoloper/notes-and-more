@@ -40,6 +40,7 @@ class UserData {
   static const USER_NUMBER_OF_FAVORITE_BOOKS="numberOfFavoriteBooks";
   static const USER_NUMBER_OF_LIKES="numberOfLikes";
   static const USER_NUMBER_OF_SHARES="numberOfShares";
+  static const USER_FIREBASE_TOKEN="firebaseMessagingToken";
 
 
   /// A necessary factory constructor for creating a new User instance

@@ -3,32 +3,39 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mh_care/Controller/AddBooksGetXController.dart';
 import 'package:mh_care/Controller/SharedPreferencesGetXController.dart';
+import 'package:mh_care/Functions/myImagePicker.dart';
+import 'package:mh_care/Model/Category/Category.dart';
 import 'package:mh_care/Model/UserData/UserData.dart';
 
 class AddBookPage extends StatelessWidget {
-  final String currentUserId;
+  Category category;
 
-  AddBookPage(this.currentUserId);
-
-  final bookNameController = TextEditingController();
-  final bookCategoryController = TextEditingController();
-  bool _nameValidate = false;
-  bool _categoryValidate = false;
-
-  String imageUrl;
-  String pdfUrl;
-
-  Stream<DocumentSnapshot> provideDocumentFieldStream() {
-    return FirebaseFirestore.instance
-        // .collection('admin')
-        .collection('user')
-        .doc(currentUserId)
-        .snapshots();
+  AddBookPage({Category category}){
+    this.category =category;
   }
+
+  // final bookNameController = TextEditingController();
+  // final bookCategoryController = TextEditingController();
+  // bool _nameValidate = false;
+  // bool _categoryValidate = false;
+  //
+  // String imageUrl;
+  // String imagePath;
+  // String pdfUrl;
+
+  // Stream<DocumentSnapshot> provideDocumentFieldStream() {
+  //   return FirebaseFirestore.instance
+  //       // .collection('admin')
+  //       .collection('user')
+  //       .doc(currentUserId)
+  //       .snapshots();
+  // }
 
   @override
   Widget build(BuildContext context) {
+    print(category.name);
     SharedPreferencesGetXController prefController = Get.find();
+    var controller = Get.put(AddBooksGetXController(category));
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
@@ -70,7 +77,7 @@ class AddBookPage extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Text(
                           prefController.pref.getString(UserData.USER_NAME),
-                          style: TextStyle(color: Colors.white, fontSize: 8),
+                          style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
                       Text(
@@ -87,9 +94,10 @@ class AddBookPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: GetBuilder<AddBooksGetXController>(
+                  init: controller,
                   builder: (controller) {
                     return TextField(
-                        controller: bookNameController,
+                        // controller: bookNameController,
                         keyboardType: TextInputType.text,
                         autofocus: false,
                         textInputAction: TextInputAction.next,
@@ -110,25 +118,78 @@ class AddBookPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: GetBuilder<AddBooksGetXController>(
+                  init: controller,
                   builder: (controller) {
                     return TextField(
-                        controller: bookCategoryController,
+                        // controller: bookCategoryController,
                         keyboardType: TextInputType.text,
                         autofocus: false,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelText: 'Book Dropbox Url',
-                          errorText: controller.isPdfUrlError
-                              ? 'Enter a Correct Dropbox Link'
-                              : null,
-                          border: OutlineInputBorder(),
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        ));
+                            fillColor: Colors.white,
+                            filled: true,
+                            labelText: 'Book Dropbox Url',
+                            errorText: controller.isPdfUrlError
+                                ? 'Enter a Correct Dropbox Link'
+                                : null,
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.info_outline_rounded),
+                              color: Colors.black54,
+                              onPressed: () {
+                                Get.bottomSheet(
+                                    Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+                                        child: Column(
+
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              "Please Add A File With This URL Format",
+                                              style: Get.textTheme.headline6,
+                                            ),
+                                            Text(
+                                              "https://www.dropbox.com/s/8i1vv76racw7z6r/1.txt?dl=1",
+                                              style: Get.textTheme.bodyText1,
+                                            ),
+                                            Text(
+                                              "And Please Make sure that dl=1 bc it makes the link a direct one",
+                                              style: Get.textTheme.headline6,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.white);
+                              },
+                            )));
                   },
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+                child: GetBuilder<AddBooksGetXController>(init:controller,
+                    builder: (controller){
+
+
+                    return DropdownButton<String>(
+                      isExpanded: true,
+                      value: controller.category.id,
+                      hint: Text("Please Select Category"),
+                      items: controller.categories.map((e){
+                        print("${e.name}|${e.id}");
+                        return DropdownMenuItem<String>(child: Text(e.name),value: e.id,);
+                      }).toList(),
+                      onChanged: (value){
+                        print(value);
+                        controller.selectedCategoryId= value;
+                      },
+                    );
+
+                }),
               ),
               // getButtons(),
               Padding(
@@ -137,8 +198,10 @@ class AddBookPage extends StatelessWidget {
                   horizontal: 16,
                 ),
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     // uploadImage();
+                    var imagePath =await myImagePicker();
+                    controller.coverImagePath = imagePath;
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 13),
@@ -167,62 +230,62 @@ class AddBookPage extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 16,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    //TODO: modify this
-                    // getPdfAndUpload();
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 13),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black12,
-                              spreadRadius: 2,
-                              blurRadius: 3,
-                              offset: Offset(
-                                2,
-                                3,
-                              ))
-                        ]),
-                    child: Text(
-                      'Upload PDF',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 16,
-                ),
-                child: Text(
-                  imageUrl == null && pdfUrl == null
-                      ? 'Must Upload Cover Photo and PDF File'
-                      : pdfUrl == null
-                          ? ' Must Upload PDF File '
-                          : imageUrl == null
-                              ? ' Must Upload Cover Photo '
-                              : 'Alls Set',
-                  style: TextStyle(
-                      color: imageUrl == null || pdfUrl == null
-                          ? Colors.red
-                          : Colors.green),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(
+              //     vertical: 8,
+              //     horizontal: 16,
+              //   ),
+              //   child: GestureDetector(
+              //     onTap: () {
+              //       //TODO: modify this
+              //       // getPdfAndUpload();
+              //     },
+              //     child: Container(
+              //       padding: EdgeInsets.symmetric(vertical: 13),
+              //       width: double.infinity,
+              //       decoration: BoxDecoration(
+              //           color: Colors.white,
+              //           borderRadius: BorderRadius.circular(20),
+              //           boxShadow: [
+              //             BoxShadow(
+              //                 color: Colors.black12,
+              //                 spreadRadius: 2,
+              //                 blurRadius: 3,
+              //                 offset: Offset(
+              //                   2,
+              //                   3,
+              //                 ))
+              //           ]),
+              //       child: Text(
+              //         'Upload PDF',
+              //         style: TextStyle(
+              //             color: Colors.black,
+              //             fontSize: 16,
+              //             fontWeight: FontWeight.bold),
+              //         textAlign: TextAlign.center,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(
+              //     vertical: 8,
+              //     horizontal: 16,
+              //   ),
+              //   child: Text(
+              //     imageUrl == null && pdfUrl == null
+              //         ? 'Must Upload Cover Photo and PDF File'
+              //         : pdfUrl == null
+              //             ? ' Must Upload PDF File '
+              //             : imageUrl == null
+              //                 ? ' Must Upload Cover Photo '
+              //                 : 'Alls Set',
+              //     style: TextStyle(
+              //         color: imageUrl == null || pdfUrl == null
+              //             ? Colors.red
+              //             : Colors.green),
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 8,
@@ -231,52 +294,52 @@ class AddBookPage extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     // setState(() {
-                    bookCategoryController.text.isEmpty
-                        ? _categoryValidate = true
-                        : _categoryValidate = false;
-                    bookNameController.text.isEmpty
-                        ? _nameValidate = true
-                        : _nameValidate = false;
+                    // bookCategoryController.text.isEmpty
+                    //     ? _categoryValidate = true
+                    //     : _categoryValidate = false;
+                    // bookNameController.text.isEmpty
+                    //     ? _nameValidate = true
+                    //     : _nameValidate = false;
                     // });
-                    if (_nameValidate == false &&
-                        _categoryValidate == false &&
-                        imageUrl != null) {
-                      FirebaseFirestore.instance
-                          .collection('books')
-                          .doc('${bookCategoryController.text}')
-                          .set(
-                        {
-                          'category': bookCategoryController.text,
-                        },
-                      ).then((value) {
-                        //Do your stuff.
-                      });
-                      FirebaseFirestore.instance
-                          .collection('books')
-                          .doc('${bookCategoryController.text}')
-                          .collection('Books')
-                          .doc()
-                          .set(
-                        {
-                          'bookName': bookNameController.text,
-                          'category': bookCategoryController.text,
-                          'imageurl': imageUrl,
-                          'pdfurl': pdfUrl
-                        },
-                      ).then((value) {
-                        //Do your stuff.
-                      });
-
-                      bookCategoryController.clear();
-                      bookNameController.clear();
-                      Navigator.pop(context);
-                    }
+                    // if (_nameValidate == false &&
+                    //     _categoryValidate == false &&
+                    //     imageUrl != null) {
+                    //   FirebaseFirestore.instance
+                    //       .collection('books')
+                    //       .doc('${bookCategoryController.text}')
+                    //       .set(
+                    //     {
+                    //       'category': bookCategoryController.text,
+                    //     },
+                    //   ).then((value) {
+                    //     //Do your stuff.
+                    //   });
+                    //   FirebaseFirestore.instance
+                    //       .collection('books')
+                    //       .doc('${bookCategoryController.text}')
+                    //       .collection('Books')
+                    //       .doc()
+                    //       .set(
+                    //     {
+                    //       'bookName': bookNameController.text,
+                    //       'category': bookCategoryController.text,
+                    //       'imageurl': imageUrl,
+                    //       'pdfurl': pdfUrl
+                    //     },
+                    //   ).then((value) {
+                    //     //Do your stuff.
+                    //   });
+                    //
+                    //   bookCategoryController.clear();
+                    //   bookNameController.clear();
+                    //   Navigator.pop(context);
+                    // }
                   },
                   child: Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(vertical: 13),
                     decoration: BoxDecoration(
-                        color: Colors.green[400],
+                        color: Get.theme.primaryColor,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(

@@ -6,17 +6,21 @@ import 'package:get/get.dart';
 import 'package:mh_care/Controller/BooksGetXController.dart';
 import 'package:mh_care/CustomWidgets/ErrorWidget.dart';
 import 'package:mh_care/Model/Book/Book.dart';
+import 'package:mh_care/Model/Category/Category.dart';
 import 'package:mh_care/Pages/AddBookPage.dart';
 import 'package:mh_care/Pages/PDFViewer.dart';
 
 class BooksPage extends StatelessWidget {
-  String _categoryId="";
-  BooksPage({String categoryId}):this._categoryId=categoryId;
+  Category _category;
+  BooksPage({Category category}) {
+    this._category = category;
+  }
   @override
   Widget build(BuildContext context) {
+    print(_category.name);
     BooksGetXController controller =
     Get.put(BooksGetXController(
-      categoryId: _categoryId,
+      category: _category,
     ));
     return Scaffold(
         floatingActionButton: FloatingActionButton(
@@ -25,7 +29,8 @@ class BooksPage extends StatelessWidget {
           child: Icon(Icons.add),
           onPressed: () {
             //TODO: Go To add book page;
-            Get.to(()=>AddBookPage("HnJeMxfNxJX441Zqu4ahMcVrqHs2"));
+            print("BooksPage:${_category.name}");
+            Get.to(()=>AddBookPage(category: _category,));
           },
         ),
         appBar: AppBar(
