@@ -11,6 +11,7 @@ class BooksGetXController extends GetxController {
   BooksGetXController({Category category}):this._category=category;
 
   Stream<List<Book>> getBookStream() {
+    if (_category == null)
     return FirebaseFirestore.instance
         .collection("newBooks")
         .snapshots()
@@ -25,6 +26,22 @@ class BooksGetXController extends GetxController {
       });
       return books;
     });
+    else
+      return FirebaseFirestore.instance
+          .collection("newBooks")
+      .where(Book.BOOK_CATEGORY_ID,isEqualTo: _category.id)
+          .snapshots()
+          .map((event) {
+        books = [];
+        event.docs.forEach((element) {
+          print(element..data().toString());
+
+          var book = Book.fromJson(element.data());
+          book.id = element.id;
+          books.add(book);
+        });
+        return books;
+      });
 
     //TODO: uncomment after adding category
     // if (_categoryId.isEmpty) {

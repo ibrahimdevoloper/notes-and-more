@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mh_care/Controller/BooksCategoryGetXController.dart';
 import 'package:mh_care/Controller/SharedPreferencesGetXController.dart';
 import 'package:mh_care/Model/UserData/UserData.dart';
 import 'package:mh_care/Pages/Admin_Home.dart';
@@ -100,6 +101,7 @@ class _MyAppState extends State<MyApp> {
           if (snapshot.connectionState == ConnectionState.done) {
             SharedPreferences pref = snapshot.data[1];
             Get.create(() => SharedPreferencesGetXController(pref));
+            // Get.create(() => BooksCategoryGetXController());
           }
           return GetMaterialApp(
             title: 'Notes And More',

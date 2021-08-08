@@ -8,6 +8,7 @@ import 'package:mh_care/Model/UserData/UserData.dart';
 import 'package:mh_care/Pages/AddBookPage.dart';
 import 'package:mh_care/Pages/BooksCategoryPage.dart';
 import 'package:get/get.dart';
+import 'package:mh_care/Pages/BooksPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminHome extends StatelessWidget {
@@ -102,7 +103,7 @@ class AdminHome extends StatelessWidget {
               ListTile(
                 tileColor: Colors.transparent,
                 title: Text(
-                  'Add new Book',
+                  'Display All Books',
                   style: TextStyle(fontSize: _height * 0.023),
                 ),
                 trailing: Icon(
@@ -113,7 +114,7 @@ class AdminHome extends StatelessWidget {
                   // TODO: get user uid from pref
                   SharedPreferencesGetXController prefController = Get.find();
                   SharedPreferences pref =prefController.pref;
-                  Get.to(()=>AddBookPage());
+                  Get.to(()=>BooksPage());
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(

@@ -10,8 +10,8 @@ import 'package:mh_care/Model/UserData/UserData.dart';
 class AddBookPage extends StatelessWidget {
   Category category;
 
-  AddBookPage({Category category}){
-    this.category =category;
+  AddBookPage({Category category}) {
+    this.category = category;
   }
 
   // final bookNameController = TextEditingController();
@@ -33,7 +33,7 @@ class AddBookPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(category.name);
+    // print(category.name);
     SharedPreferencesGetXController prefController = Get.find();
     var controller = Get.put(AddBooksGetXController(category));
     return Scaffold(
@@ -97,21 +97,25 @@ class AddBookPage extends StatelessWidget {
                   init: controller,
                   builder: (controller) {
                     return TextField(
-                        // controller: bookNameController,
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelText: 'Book Name',
-                          errorText: controller.isNameError
-                              ? 'Please Enter a Correct Name'
-                              : null,
-                          border: OutlineInputBorder(),
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        ));
+                      // controller: bookNameController,
+                      keyboardType: TextInputType.text,
+                      autofocus: false,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        labelText: 'Book Name',
+                        errorText: controller.isNameError
+                            ? 'Please Enter a Correct Name'
+                            : null,
+                        border: OutlineInputBorder(),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      ),
+                      onChanged: (value) {
+                        controller.name = value;
+                      },
+                    );
                   },
                 ),
               ),
@@ -121,75 +125,95 @@ class AddBookPage extends StatelessWidget {
                   init: controller,
                   builder: (controller) {
                     return TextField(
-                        // controller: bookCategoryController,
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            labelText: 'Book Dropbox Url',
-                            errorText: controller.isPdfUrlError
-                                ? 'Enter a Correct Dropbox Link'
-                                : null,
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.info_outline_rounded),
-                              color: Colors.black54,
-                              onPressed: () {
-                                Get.bottomSheet(
-                                    Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-                                        child: Column(
-
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              "Please Add A File With This URL Format",
-                                              style: Get.textTheme.headline6,
-                                            ),
-                                            Text(
-                                              "https://www.dropbox.com/s/8i1vv76racw7z6r/1.txt?dl=1",
-                                              style: Get.textTheme.bodyText1,
-                                            ),
-                                            Text(
-                                              "And Please Make sure that dl=1 bc it makes the link a direct one",
-                                              style: Get.textTheme.headline6,
-                                            ),
-                                          ],
-                                        ),
+                      // controller: bookCategoryController,
+                      keyboardType: TextInputType.text,
+                      autofocus: false,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          labelText: 'Book Dropbox Url',
+                          errorText: controller.isPdfUrlError
+                              ? 'Enter a Correct Dropbox Link'
+                              : null,
+                          border: OutlineInputBorder(),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.info_outline_rounded),
+                            color: Colors.black54,
+                            onPressed: () {
+                              Get.bottomSheet(
+                                  Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 8),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            "Please Add A File With This URL Format",
+                                            style: Get.textTheme.headline6,
+                                          ),
+                                          Text(
+                                            "https://www.dropbox.com/s/8i1vv76racw7z6r/1.pdf?dl=1",
+                                            style: Get.textTheme.bodyText1,
+                                          ),
+                                          Text(
+                                            "And Please Make sure that dl=1 bc it makes the link a direct one",
+                                            style: Get.textTheme.headline6,
+                                          ),
+                                          Text(
+                                            "And Please Make sure that file has PDF format",
+                                            style: Get.textTheme.headline6,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    backgroundColor: Colors.white);
-                              },
-                            )));
+                                  ),
+                                  backgroundColor: Colors.white);
+                            },
+                          )),
+                      onChanged: (value) {
+                        controller.pdfUrl = value;
+                      },
+                    );
                   },
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-                child: GetBuilder<AddBooksGetXController>(init:controller,
-                    builder: (controller){
-
-
-                    return DropdownButton<String>(
-                      isExpanded: true,
-                      value: controller.category!=null?controller.category.id:null,
-                      hint: Text("Please Select Category"),
-                      items: controller.categories.map((e){
-                        print("${e.name}|${e.id}");
-                        return DropdownMenuItem<String>(child: Text(e.name),value: e.id,);
-                      }).toList(),
-                      onChanged: (value){
-                        print(value);
-                        controller.selectedCategoryId= value;
-                      },
-                    );
-
-                }),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: GetBuilder<AddBooksGetXController>(
+                    init: controller,
+                    builder: (controller) {
+                      if (controller.isCategoryLoading) {
+                        return CircularProgressIndicator();
+                      } else {
+                        controller.categories.map((e) {
+                          print("dropbox");
+                          print("${e.name}|${e.id}");
+                        });
+                        return DropdownButton<String>(
+                          isExpanded: true,
+                          value: controller.category != null
+                              ? controller.category.id
+                              : null,
+                          hint: Text("Please Select Category"),
+                          items: controller.categories.map((e) {
+                            print("${e.name}|${e.id}");
+                            return DropdownMenuItem<String>(
+                              child: Text(e.name),
+                              value: e.id,
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            print(value);
+                            controller.selectedCategoryId = value;
+                          },
+                        );
+                      }
+                    }),
               ),
               // getButtons(),
               Padding(
@@ -200,7 +224,7 @@ class AddBookPage extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () async {
                     // uploadImage();
-                    var imagePath =await myImagePicker();
+                    var imagePath = await myImagePicker();
                     controller.coverImagePath = imagePath;
                   },
                   child: Container(
@@ -220,7 +244,7 @@ class AddBookPage extends StatelessWidget {
                               ))
                         ]),
                     child: Text(
-                      'Upload Cover',
+                      'Upload Cover Image',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 16,
@@ -291,75 +315,88 @@ class AddBookPage extends StatelessWidget {
                   vertical: 8,
                   horizontal: 16,
                 ),
-                child: GestureDetector(
-                  onTap: () {
-                    // setState(() {
-                    // bookCategoryController.text.isEmpty
-                    //     ? _categoryValidate = true
-                    //     : _categoryValidate = false;
-                    // bookNameController.text.isEmpty
-                    //     ? _nameValidate = true
-                    //     : _nameValidate = false;
-                    // });
-                    // if (_nameValidate == false &&
-                    //     _categoryValidate == false &&
-                    //     imageUrl != null) {
-                    //   FirebaseFirestore.instance
-                    //       .collection('books')
-                    //       .doc('${bookCategoryController.text}')
-                    //       .set(
-                    //     {
-                    //       'category': bookCategoryController.text,
-                    //     },
-                    //   ).then((value) {
-                    //     //Do your stuff.
-                    //   });
-                    //   FirebaseFirestore.instance
-                    //       .collection('books')
-                    //       .doc('${bookCategoryController.text}')
-                    //       .collection('Books')
-                    //       .doc()
-                    //       .set(
-                    //     {
-                    //       'bookName': bookNameController.text,
-                    //       'category': bookCategoryController.text,
-                    //       'imageurl': imageUrl,
-                    //       'pdfurl': pdfUrl
-                    //     },
-                    //   ).then((value) {
-                    //     //Do your stuff.
-                    //   });
-                    //
-                    //   bookCategoryController.clear();
-                    //   bookNameController.clear();
-                    //   Navigator.pop(context);
-                    // }
+                child: GetBuilder<AddBooksGetXController>(
+                  init: controller,
+                  builder: (controller) {
+                    if (controller.isLoading)
+                      return CircularProgressIndicator();
+                    else
+                      return GestureDetector(
+                        onTap: () {
+                          if (controller.validator())
+                            Get.snackbar(
+                                "Error", "Please Check Your Entered Info");
+                          else
+                            controller.addBook();
+                          // setState(() {
+                          // bookCategoryController.text.isEmpty
+                          //     ? _categoryValidate = true
+                          //     : _categoryValidate = false;
+                          // bookNameController.text.isEmpty
+                          //     ? _nameValidate = true
+                          //     : _nameValidate = false;
+                          // });
+                          // if (_nameValidate == false &&
+                          //     _categoryValidate == false &&
+                          //     imageUrl != null) {
+                          //   FirebaseFirestore.instance
+                          //       .collection('books')
+                          //       .doc('${bookCategoryController.text}')
+                          //       .set(
+                          //     {
+                          //       'category': bookCategoryController.text,
+                          //     },
+                          //   ).then((value) {
+                          //     //Do your stuff.
+                          //   });
+                          //   FirebaseFirestore.instance
+                          //       .collection('books')
+                          //       .doc('${bookCategoryController.text}')
+                          //       .collection('Books')
+                          //       .doc()
+                          //       .set(
+                          //     {
+                          //       'bookName': bookNameController.text,
+                          //       'category': bookCategoryController.text,
+                          //       'imageurl': imageUrl,
+                          //       'pdfurl': pdfUrl
+                          //     },
+                          //   ).then((value) {
+                          //     //Do your stuff.
+                          //   });
+                          //
+                          //   bookCategoryController.clear();
+                          //   bookNameController.clear();
+                          //   Navigator.pop(context);
+                          // }
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(vertical: 13),
+                          decoration: BoxDecoration(
+                              color: Get.theme.primaryColor,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black12,
+                                    spreadRadius: 2,
+                                    blurRadius: 3,
+                                    offset: Offset(
+                                      2,
+                                      3,
+                                    ))
+                              ]),
+                          child: Text(
+                            'Save',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      );
                   },
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 13),
-                    decoration: BoxDecoration(
-                        color: Get.theme.primaryColor,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black12,
-                              spreadRadius: 2,
-                              blurRadius: 3,
-                              offset: Offset(
-                                2,
-                                3,
-                              ))
-                        ]),
-                    child: Text(
-                      'Save',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
                 ),
               ),
             ],

@@ -17,7 +17,7 @@ class BooksPage extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
-    print(_category.name);
+    // print(_category.name);
     BooksGetXController controller =
     Get.put(BooksGetXController(
       category: _category,
@@ -29,7 +29,7 @@ class BooksPage extends StatelessWidget {
           child: Icon(Icons.add),
           onPressed: () {
             //TODO: Go To add book page;
-            print("BooksPage:${_category.name}");
+            // print("BooksPage:${_category.name}");
             Get.to(()=>AddBookPage(category: _category,));
           },
         ),
@@ -41,7 +41,7 @@ class BooksPage extends StatelessWidget {
         ),
         body: StreamBuilder<List<Book>>(
             stream: controller.getBookStream(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
+            builder: (BuildContext context, snapshot) {
               if (snapshot.hasError) {
                 printError(info: snapshot.error);
                 Get.snackbar("Error", "Error While Getting Data");
@@ -68,48 +68,53 @@ class BooksPage extends StatelessWidget {
                     //         category: books[i],
                     //       );
                     //     });
-                    return Center(child: Text("books"));
+                    // return Center(child: Text("books"));
+
                     //TODO: un comment
-                    // return GridView.builder(
-                    //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    //     crossAxisCount: 3,
-                    //     mainAxisExtent: 270,
-                    //     childAspectRatio: 5,
-                    //     mainAxisSpacing: 2,
-                    //     crossAxisSpacing: 2,
-                    //   ),
-                    //   itemBuilder: (BuildContext context, int index) {
-                    //     return GestureDetector(
-                    //       onTap: () {
-                    //         Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //               builder: (context) =>
-                    //               // BookView(snapshot.data.documents[index]),
-                    //               PDFViewerCachedFromUrl(
-                    //                 url: snapshot.data.documents[index]['pdfurl'],
-                    //                 name: snapshot.data.documents[index]
-                    //                 ['bookName'],
-                    //               )),
-                    //         );
-                    //       },
-                    //       child: ClipRRect(
-                    //         borderRadius: BorderRadius.circular(15.0),
-                    //         child: CachedNetworkImage(
-                    //           imageUrl: snapshot.data.documents[index]['imageurl'],
-                    //           fit: BoxFit.cover,
-                    //           progressIndicatorBuilder:
-                    //               (context, url, downloadProgress) => Center(
-                    //             child: CircularProgressIndicator(
-                    //                 value: downloadProgress.progress),
-                    //           ),
-                    //           errorWidget: (context, url, error) => Icon(Icons.error),
-                    //         ),
-                    //       ),
-                    //     );
-                    //   },
-                    //   itemCount: snapshot.data.documents.length,
-                    // );
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisExtent: 270,
+                        childAspectRatio: 5,
+                        mainAxisSpacing: 2,
+                        crossAxisSpacing: 2,
+                      ),
+                      itemBuilder: (BuildContext context, int i) {
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(()=> PDFViewerCachedFromUrl(
+                              url: snapshot.data[i].pdfUrl,
+                              name: snapshot.data[i].bookName,
+                            ));
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) =>
+                            //       // BookView(snapshot.data.documents[index]),
+                            //       PDFViewerCachedFromUrl(
+                            //         url: snapshot.data.documents[index]['pdfurl'],
+                            //         name: snapshot.data.documents[index]
+                            //         ['bookName'],
+                            //       )),
+                            // );
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15.0),
+                            child: CachedNetworkImage(
+                              imageUrl: books[i].imageUrl,
+                              fit: BoxFit.cover,
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => Center(
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress),
+                              ),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: snapshot.data.length,
+                    );
                   } else {
                     return Center(child: MyErrorWidget(errorMessage: "No Data"));
                   }

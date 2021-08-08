@@ -3,7 +3,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 main() {
-  var regex = r"https://www.dropbox.com/\S+?(?=dl=)dl=1";
+  var regex = r"https://www.dropbox.com/\S+?(?=pdf|PDF)(PDF|pdf)\S+?(?=dl=)dl=1";
   test("check if regex return false when string is random", () {
     var testString = "avlkjbvlafdv";
     var result = RegExp(regex).hasMatch(testString);
@@ -28,13 +28,18 @@ main() {
     var result = RegExp(regex).hasMatch(testString);
     expect(result, false);
   });
-  test("check if regex return false when string is null", () {
-    var testString = null;
+  // test("check if regex return false when string is null", () {
+  //   var testString = null;
+  //   var result = RegExp(regex).hasMatch(testString);
+  //   expect(result, false);
+  // });
+  test("check if regex return false when string is dropbox and direct link and not PDF", () {
+    var testString = "https://www.dropbox.com/s/8i1vv76racw7z6r/1.txt?dl=1";
     var result = RegExp(regex).hasMatch(testString);
     expect(result, false);
   });
-  test("check if regex return true when string is dropbox and direct link", () {
-    var testString = "https://www.dropbox.com/s/8i1vv76racw7z6r/1.txt?dl=1";
+  test("check if regex return true when string is dropbox and direct link and pdf ", () {
+    var testString = "https://www.dropbox.com/s/8i1vv76racw7z6r/1.pdf?dl=1";
     var result = RegExp(regex).hasMatch(testString);
     expect(result, true);
   });
