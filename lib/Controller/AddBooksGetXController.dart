@@ -24,35 +24,34 @@ class AddBooksGetXController extends GetxController {
   bool _isPdfUrlError = false;
   bool _isCoverImagePath = false;
 
-
   AddBooksGetXController(Category category) {
     this._category = category;
-    if(this._category !=null)
-    this._selectedCategoryId = this._category.id;
+    getCategories();
+    if (this._category != null) this._selectedCategoryId = this._category.id;
   }
 
-  @override
-  void onInit() {
-
+  void getCategories() async {
     isCategoryLoading = true;
+    update();
     // BooksCategoryGetXController categoryController = Get.find();
     // if(categoryController.categories!=null) {
     //   print ("AddBooksGetXController:${categoryController.categories}");
     //   _categories = categoryController.categories;
     //   isCategoryLoading = false;
     // } else {
-      _categories = [];
-      FirebaseFirestore.instance.collection("categories").get().then((value) {
-        value.docs.map((e) {
-          var category = Category.fromJson(e.data());
-          category.id = e.id;
-          _categories.add(category);
-        });
-        print(categories);
-        isCategoryLoading = false;
-      });
-    // }
-    // _isCategoryLoading = false;
+    _categories = [];
+    var categoriesMap =
+        await FirebaseFirestore.instance.collection("categories").get();
+    // print(categoriesMap.docs[0][].toString());
+    categoriesMap.docs.forEach((e) {
+      var category = Category.fromJson(e.data());
+      category.id = e.id;
+      _categories.add(category);
+    });
+
+    print(categories);
+    isCategoryLoading = false;
+    update();
   }
 
   addBook() async {
@@ -60,21 +59,22 @@ class AddBooksGetXController extends GetxController {
       _isLoading = true;
       update();
       var storageRef =
-      FirebaseStorage.instance.ref().child("newBooks").child(name);
+          FirebaseStorage.instance.ref().child("newBooks").child(name);
       File recordFile = File(_coverImagePath);
-      var recordRef = await storageRef.child("${name} Cover").putFile(recordFile);
+      var recordRef =
+          await storageRef.child("${name} Cover").putFile(recordFile);
       _coverImageUrl = await recordRef.ref.getDownloadURL();
       await FirebaseFirestore.instance.collection('newBooks').doc().set(Book(
-        createdAt: Timestamp.now().toDate(),
-        numberOfShares: 0,
-        numberOfLikes: 0,
-        imageUrl: _coverImageUrl,
-        details: "",
-        pdfUrl: _pdfUrl,
-        category: _category.name,
-        categoryId: _category.id,
-        bookName: _name,
-      ).toJson());
+            createdAt: Timestamp.now().toDate(),
+            numberOfShares: 0,
+            numberOfLikes: 0,
+            imageUrl: _coverImageUrl,
+            details: "",
+            pdfUrl: _pdfUrl,
+            category: _category.name,
+            categoryId: _category.id,
+            bookName: _name,
+          ).toJson());
       _isLoading = false;
       update();
       Get.back();
@@ -113,8 +113,9 @@ class AddBooksGetXController extends GetxController {
   bool pdfUrlValidator() {
     if (_pdfUrl == null)
       return true;
-    else
-    if (!RegExp(r"https://www.dropbox.com/\S+?(?=pdf|PDF)(PDF|pdf)\S+?(?=dl=)dl=1").hasMatch(_pdfUrl))
+    else if (!RegExp(
+            r"https://www.dropbox.com/\S+?(?=pdf|PDF)(PDF|pdf)\S+?(?=dl=)dl=1")
+        .hasMatch(_pdfUrl))
       return true;
     else
       return false;
@@ -125,7 +126,10 @@ class AddBooksGetXController extends GetxController {
     isNameError = _name == null;
     isPdfUrlError = pdfUrlValidator();
     isCoverImagePath = _coverImagePath == null;
-    return _name == null || _coverImagePath == null||pdfUrlValidator()||_selectedCategoryId==null;
+    return _name == null ||
+        _coverImagePath == null ||
+        pdfUrlValidator() ||
+        _selectedCategoryId == null;
   }
 
   bool get isPdfUrlError => _isPdfUrlError;
@@ -166,7 +170,6 @@ class AddBooksGetXController extends GetxController {
     _isLoading = value;
     update();
   }
-
 
   bool get isCoverImagePath => _isCoverImagePath;
 
@@ -210,5 +213,6 @@ class AddBooksGetXController extends GetxController {
 
   set selectedCategoryId(String value) {
     _selectedCategoryId = value;
+    update();
   }
 }

@@ -196,8 +196,8 @@ class AddBookPage extends StatelessWidget {
                         });
                         return DropdownButton<String>(
                           isExpanded: true,
-                          value: controller.category != null
-                              ? controller.category.id
+                          value: controller.selectedCategoryId != null
+                              ? controller.selectedCategoryId
                               : null,
                           hint: Text("Please Select Category"),
                           items: controller.categories.map((e) {
@@ -209,6 +209,10 @@ class AddBookPage extends StatelessWidget {
                           }).toList(),
                           onChanged: (value) {
                             print(value);
+                            var i = controller.categories.indexWhere((element){
+                              return element.id.compareTo(value)==0;
+                            });
+                            controller.category=controller.categories[i];
                             controller.selectedCategoryId = value;
                           },
                         );

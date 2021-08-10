@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:mh_care/Controller/SharedPreferencesGetXController.dart';
 import 'package:mh_care/Model/UserData/UserData.dart';
+import 'package:mh_care/Pages/Admin_Home.dart';
+import 'package:mh_care/Pages/UserHomePage.dart';
+import 'package:mh_care/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginGetXController extends GetxController {
@@ -48,6 +51,10 @@ class LoginGetXController extends GetxController {
       pref.setString(UserData.USER_UID, userInfo.user.uid);
       _isLoading = false;
       update();
+      if (userData.role.compareTo(UserData.USER_ROLE_ADMIN)==0)
+        Get.off(()=>AdminHome());
+      else Get.off(()=>UserHomePage(userInfo.user.uid));
+      // Get.off(()=>MyApp());
     } on FirebaseAuthException catch (e) {
       // throw (err);
       printError(info: e.message);
