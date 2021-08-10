@@ -8,6 +8,7 @@ import 'package:meta/meta.dart';
 import 'package:mh_care/Controller/SharedPreferencesGetXController.dart';
 import 'package:mh_care/Model/Services/auth_Services.dart';
 import 'package:mh_care/Model/UserData/UserData.dart';
+import 'package:mh_care/Pages/UserHomePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpGetXController extends GetxController {
@@ -78,7 +79,10 @@ class SignUpGetXController extends GetxController {
         pref.setString(UserData.USER_UID, signedInUser.uid);
         _isLoading = false;
         update();
-        Get.back();
+        // if (userData.role.compareTo(UserData.USER_ROLE_ADMIN)==0)
+        //   Get.off(()=>AdminHome());
+        // else
+          Get.off(()=>UserHomePage());
       }
       // Provider.of<UserData>(context, listen: false).uid =
       //     signedInUser.uid;

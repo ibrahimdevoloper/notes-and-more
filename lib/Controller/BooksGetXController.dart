@@ -6,6 +6,7 @@ import 'package:mh_care/Model/Category/Category.dart';
 class BooksGetXController extends GetxController {
   Category _category;
   List<Book> books;
+  bool _isLoading=false;
 
 
   BooksGetXController({Category category}):this._category=category;
@@ -74,5 +75,12 @@ class BooksGetXController extends GetxController {
     //     return books;
     //   });
     // }
+  }
+
+  bool get isLoading => _isLoading;
+
+  set isLoading(bool value) {
+    _isLoading = value;
+    update(["FAP"]);
   }
 }

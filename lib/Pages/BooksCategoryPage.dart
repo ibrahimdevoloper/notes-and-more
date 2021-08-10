@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mh_care/Controller/BooksCategoryGetXController.dart';
+import 'package:mh_care/Controller/SharedPreferencesGetXController.dart';
 import 'package:mh_care/Model/Category/Category.dart';
+import 'package:mh_care/Model/UserData/UserData.dart';
 import 'package:mh_care/Pages/AddBooksCategoryPage.dart';
 import 'package:mh_care/Pages/BooksPage.dart';
 import 'package:mh_care/CustomWidgets/ErrorWidget.dart';
@@ -11,16 +13,24 @@ class BooksCategoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     BooksCategoryGetXController controller =
         Get.put(BooksCategoryGetXController());
+    SharedPreferencesGetXController prefController = Get.find();
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Get.theme.primaryColor,
-        foregroundColor: Get.theme.accentColor,
-        child: Icon(Icons.add),
-        onPressed: () {
-          //TODO: Go To add category page;
-          Get.to(() => AddBooksCategoryPage());
-        },
-      ),
+      floatingActionButton: prefController.pref
+                  .getString(UserData.USER_ROLE)
+                  .compareTo(UserData.USER_ROLE_CUSTOMER) ==
+              0
+          ? Container(
+              height: 0,
+              width: 0,
+            )
+          : FloatingActionButton(
+              backgroundColor: Get.theme.primaryColor,
+              foregroundColor: Get.theme.accentColor,
+              child: Icon(Icons.add),
+              onPressed: () {
+                Get.to(() => AddBooksCategoryPage());
+              },
+            ),
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
@@ -44,7 +54,8 @@ class BooksCategoryPage extends StatelessWidget {
             if (snapshot.hasError) {
               Get.snackbar("Error", "Error While Getting Data");
               return Center(
-                  child: MyErrorWidget(errorMessage: "Error While Getting Data"));
+                  child:
+                      MyErrorWidget(errorMessage: "Error While Getting Data"));
               // return Container(
               //   child: Column(
               //     children: [

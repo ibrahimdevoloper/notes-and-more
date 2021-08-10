@@ -53,7 +53,7 @@ class LoginGetXController extends GetxController {
       update();
       if (userData.role.compareTo(UserData.USER_ROLE_ADMIN)==0)
         Get.off(()=>AdminHome());
-      else Get.off(()=>UserHomePage(userInfo.user.uid));
+      else Get.off(()=>UserHomePage());
       // Get.off(()=>MyApp());
     } on FirebaseAuthException catch (e) {
       // throw (err);

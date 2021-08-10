@@ -4,35 +4,45 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mh_care/Controller/BooksGetXController.dart';
+import 'package:mh_care/Controller/SharedPreferencesGetXController.dart';
 import 'package:mh_care/CustomWidgets/ErrorWidget.dart';
 import 'package:mh_care/Model/Book/Book.dart';
 import 'package:mh_care/Model/Category/Category.dart';
+import 'package:mh_care/Model/UserData/UserData.dart';
 import 'package:mh_care/Pages/AddBookPage.dart';
 import 'package:mh_care/Pages/PDFViewer.dart';
 
 class BooksPage extends StatelessWidget {
   Category _category;
+
   BooksPage({Category category}) {
     this._category = category;
   }
+
   @override
   Widget build(BuildContext context) {
     // print(_category.name);
-    BooksGetXController controller =
-    Get.put(BooksGetXController(
+    BooksGetXController controller = Get.put(BooksGetXController(
       category: _category,
     ));
+    SharedPreferencesGetXController prefController = Get.find();
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Get.theme.primaryColor,
-          foregroundColor: Get.theme.accentColor,
-          child: Icon(Icons.add),
-          onPressed: () {
-            //TODO: Go To add book page;
-            // print("BooksPage:${_category.name}");
-            Get.to(()=>AddBookPage(category: _category,));
-          },
-        ),
+        floatingActionButton: prefController.pref
+                    .getString(UserData.USER_ROLE)
+                    .compareTo(UserData.USER_ROLE_CUSTOMER) ==
+                0
+            ? Container(
+                height: 0,
+                width: 0,
+              )
+            : FloatingActionButton(
+                backgroundColor: Get.theme.primaryColor,
+                foregroundColor: Get.theme.accentColor,
+                child: Icon(Icons.add),
+                onPressed: () {
+                  Get.to(() => AddBookPage());
+                },
+              ),
         appBar: AppBar(
           backgroundColor: Get.theme.primaryColor,
           centerTitle: true,
@@ -46,7 +56,8 @@ class BooksPage extends StatelessWidget {
                 printError(info: snapshot.error);
                 Get.snackbar("Error", "Error While Getting Data");
                 return Center(
-                    child: MyErrorWidget(errorMessage: "Error While Getting Data"));
+                    child: MyErrorWidget(
+                        errorMessage: "Error While Getting Data"));
                 // return Container(
                 //   child: Column(
                 //     children: [
@@ -57,6 +68,7 @@ class BooksPage extends StatelessWidget {
                 // );
               } else {
                 if (snapshot.connectionState == ConnectionState.waiting) {
+                  controller.isLoading = true;
                   return Center(child: CircularProgressIndicator());
                 } else {
                   var books = snapshot.data;
@@ -69,8 +81,7 @@ class BooksPage extends StatelessWidget {
                     //       );
                     //     });
                     // return Center(child: Text("books"));
-
-                    //TODO: un comment
+                    controller.isLoading = false;
                     return GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
@@ -82,10 +93,10 @@ class BooksPage extends StatelessWidget {
                       itemBuilder: (BuildContext context, int i) {
                         return GestureDetector(
                           onTap: () {
-                            Get.to(()=> PDFViewerCachedFromUrl(
-                              url: snapshot.data[i].pdfUrl,
-                              name: snapshot.data[i].bookName,
-                            ));
+                            Get.to(() => PDFViewerCachedFromUrl(
+                                  url: snapshot.data[i].pdfUrl,
+                                  name: snapshot.data[i].bookName,
+                                ));
                             // Navigator.push(
                             //   context,
                             //   MaterialPageRoute(
@@ -108,7 +119,8 @@ class BooksPage extends StatelessWidget {
                                 child: CircularProgressIndicator(
                                     value: downloadProgress.progress),
                               ),
-                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
                             ),
                           ),
                         );
@@ -116,7 +128,8 @@ class BooksPage extends StatelessWidget {
                       itemCount: snapshot.data.length,
                     );
                   } else {
-                    return Center(child: MyErrorWidget(errorMessage: "No Data"));
+                    return Center(
+                        child: MyErrorWidget(errorMessage: "No Data"));
                   }
                 }
               }
@@ -127,7 +140,6 @@ class BooksPage extends StatelessWidget {
             }));
   }
 }
-
 
 // class BookList extends StatefulWidget {
 //   // DocumentSnapshot doc;

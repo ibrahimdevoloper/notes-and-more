@@ -159,7 +159,7 @@ class _MyAppState extends State<MyApp> {
                           if (pref.getString(UserData.USER_ROLE).compareTo(UserData.USER_ROLE_ADMIN)==0)
                             return AdminHome();
                           else
-                            return UserHomePage(pref.getString(UserData.USER_UID));
+                            return UserHomePage();
                         }
                       } else {
                         return LoginPage();

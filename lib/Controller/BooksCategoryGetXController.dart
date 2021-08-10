@@ -4,6 +4,7 @@ import 'package:mh_care/Model/Category/Category.dart';
 
 class BooksCategoryGetXController extends GetxController {
   List<Category> categories;
+  bool _isLoading=false;
 
   Stream<List<Category>> getCategoryStream() {
     return FirebaseFirestore.instance
@@ -19,5 +20,12 @@ class BooksCategoryGetXController extends GetxController {
       });
       return categories;
     });
+  }
+
+  bool get isLoading => _isLoading;
+
+  set isLoading(bool value) {
+    _isLoading = value;
+    update(["FAP"]);
   }
 }

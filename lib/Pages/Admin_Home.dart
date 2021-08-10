@@ -9,6 +9,7 @@ import 'package:mh_care/Pages/AddBookPage.dart';
 import 'package:mh_care/Pages/BooksCategoryPage.dart';
 import 'package:get/get.dart';
 import 'package:mh_care/Pages/BooksPage.dart';
+import 'package:mh_care/Pages/log_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminHome extends StatelessWidget {
@@ -142,7 +143,7 @@ class AdminHome extends StatelessWidget {
                   ),
                   onTap: () {
                     AuthServices.logout();
-                    Get.to(()=>BooksCategoryPage());
+                    Get.off(()=>LoginPage());
 
                     // Navigator.pushReplacement(
                     //     context,
