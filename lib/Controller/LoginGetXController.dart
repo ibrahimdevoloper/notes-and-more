@@ -32,7 +32,7 @@ class LoginGetXController extends GetxController {
       var userInfo = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: _email, password: _password);
       //save user data in the device like shared pref
-      SharedPreferencesGetXController prefController = Get.find();
+      GlobalDataGetXController prefController = Get.find();
       SharedPreferences pref = prefController.pref;
       var userDataMap = await FirebaseFirestore.instance
           .collection("users")

@@ -12,6 +12,7 @@ class AddBooksGetXController extends GetxController {
   bool _isCategoryLoading = false;
 
   String _name;
+  String _details;
   Category _category;
   String _selectedCategoryId;
   String _pdfUrl;
@@ -21,6 +22,7 @@ class AddBooksGetXController extends GetxController {
   List<Category> _categories;
 
   bool _isNameError = false;
+  bool _isDetailsError = false;
   bool _isPdfUrlError = false;
   bool _isCoverImagePath = false;
 
@@ -68,8 +70,9 @@ class AddBooksGetXController extends GetxController {
             createdAt: Timestamp.now().toDate(),
             numberOfShares: 0,
             numberOfLikes: 0,
+            bookLikesList: [],
             imageUrl: _coverImageUrl,
-            details: "",
+            details: _details,
             pdfUrl: _pdfUrl,
             category: _category.name,
             categoryId: _category.id,
@@ -124,12 +127,14 @@ class AddBooksGetXController extends GetxController {
   //return true if there are any errors
   bool validator() {
     isNameError = _name == null;
+    isDetailsError = _details == null;
     isPdfUrlError = pdfUrlValidator();
     isCoverImagePath = _coverImagePath == null;
     return _name == null ||
         _coverImagePath == null ||
         pdfUrlValidator() ||
-        _selectedCategoryId == null;
+        _selectedCategoryId == null||
+    _details==null;
   }
 
   bool get isPdfUrlError => _isPdfUrlError;
@@ -214,5 +219,18 @@ class AddBooksGetXController extends GetxController {
   set selectedCategoryId(String value) {
     _selectedCategoryId = value;
     update();
+  }
+
+  bool get isDetailsError => _isDetailsError;
+
+  set isDetailsError(bool value) {
+    _isDetailsError = value;
+    update();
+  }
+
+  String get details => _details;
+
+  set details(String value) {
+    _details = value;
   }
 }

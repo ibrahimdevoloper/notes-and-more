@@ -13,7 +13,7 @@ class BooksCategoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     BooksCategoryGetXController controller =
         Get.put(BooksCategoryGetXController());
-    SharedPreferencesGetXController prefController = Get.find();
+    GlobalDataGetXController prefController = Get.find();
     return Scaffold(
       floatingActionButton: prefController.pref
                   .getString(UserData.USER_ROLE)

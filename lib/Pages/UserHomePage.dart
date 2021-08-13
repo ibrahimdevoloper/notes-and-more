@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mh_care/Controller/SharedPreferencesGetXController.dart';
+import 'package:mh_care/Controller/UserHomeGetXController.dart';
 // import 'package:mh_care/Model/Services/Size_helper.dart';
 // import 'package:mh_care/Model/Services/auth_Services.dart';
 import 'package:mh_care/Model/Services/Size_helper.dart';
@@ -16,18 +17,49 @@ import 'package:mh_care/main.dart';
 import 'Contact_Us.dart';
 import 'BooksCategoryPage.dart';
 
-class UserHomePage extends StatelessWidget {
+class UserHomePage extends StatefulWidget {
+  @override
+  _UserHomePageState createState() => _UserHomePageState();
+}
+
+class _UserHomePageState extends State<UserHomePage> {
+  GlobalDataGetXController globalController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // final _height = displayHeight(context) -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
+    globalController= Get.find();
+    UserHomeGetXController controller = Get.put(UserHomeGetXController());
+    controller.redirectToBook();
+  }
   @override
   Widget build(BuildContext context) {
-    final _height = displayHeight(context) -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    SharedPreferencesGetXController prefController = Get.find();
+    // final _height = displayHeight(context) -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
+    // GlobalDataGetXController globalController = Get.find();
+    return GetBuilder<UserHomeGetXController>(
+  builder: (controller) {
     return Scaffold(
-      body: Column(
+      body:
+      controller.isLoading?
+      Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(),
+            Text("Redirecting...")
+          ],
+        ),
+      ):
+      Column(
         children: [
           Container(
-            height: _height * 0.4,
+            height: 300,
             decoration: BoxDecoration(
                 image: DecorationImage(
                     fit: BoxFit.cover,
@@ -50,15 +82,15 @@ class UserHomePage extends StatelessWidget {
                             image: AssetImage('assets/oldImages/user.png'))),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: _height * .01),
+                    padding: EdgeInsets.symmetric(vertical:8),
                     child: Text(
-                      prefController.pref.getString(UserData.USER_NAME),
+                      globalController.pref.getString(UserData.USER_NAME),
                       style:
-                      TextStyle(color: Colors.white, fontSize: _height * .03),
+                      TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
                   Text(
-                    prefController.pref.getString(UserData.USER_EMAIL),
+                    globalController.pref.getString(UserData.USER_EMAIL),
                     style: TextStyle(color: Colors.white),
                   ),
                 ],
@@ -69,7 +101,7 @@ class UserHomePage extends StatelessWidget {
             tileColor: Colors.transparent,
             title: Text(
               'All Categories',
-              style: TextStyle(fontSize: _height * 0.023),
+              // style: TextStyle(fontSize: _height * 0.023),
             ),
             trailing: Icon(
               Icons.arrow_forward_ios,
@@ -90,7 +122,7 @@ class UserHomePage extends StatelessWidget {
             tileColor: Colors.transparent,
             title: Text(
               'About Us',
-              style: TextStyle(fontSize: _height * 0.023),
+              // style: TextStyle(fontSize: _height * 0.023),
             ),
             trailing: Icon(
               Icons.arrow_forward_ios,
@@ -111,7 +143,7 @@ class UserHomePage extends StatelessWidget {
             tileColor: Colors.transparent,
             title: Text(
               'Contact Us',
-              style: TextStyle(fontSize: _height * 0.023),
+              // style: TextStyle(fontSize: _height * 0.023),
             ),
             trailing: Icon(
               Icons.arrow_forward_ios,
@@ -132,7 +164,9 @@ class UserHomePage extends StatelessWidget {
             tileColor: Colors.transparent,
             title: Text(
               'Logout ',
-              style: TextStyle(fontSize: _height * 0.023, color: Colors.red),
+              style: TextStyle(
+                  // fontSize: _height * 0.023,
+                  color: Colors.red),
             ),
             trailing: Icon(
               Icons.arrow_forward_ios,
@@ -152,8 +186,150 @@ class UserHomePage extends StatelessWidget {
         ],
       ),
     );
+  },
+);
   }
 }
+
+//Original code
+// class UserHomePage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     final _height = displayHeight(context) -
+//         MediaQuery.of(context).padding.top -
+//         kToolbarHeight;
+//     GlobalDataGetXController globalController = Get.find();
+//     return Scaffold(
+//       body: Column(
+//         children: [
+//           Container(
+//             height: _height * 0.4,
+//             decoration: BoxDecoration(
+//                 image: DecorationImage(
+//                     fit: BoxFit.cover,
+//                     colorFilter: new ColorFilter.mode(
+//                         Colors.black.withOpacity(0.4), BlendMode.darken),
+//                     image: AssetImage('assets/oldImages/thom.jpg'))),
+//             child: Center(
+//               child: Column(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: [
+//                   Container(
+//                     height: 80,
+//                     width: 80,
+//                     decoration: BoxDecoration(
+//                         color: Colors.white60,
+//                         shape: BoxShape.circle,
+//                         border: Border.all(width: 2, color: Colors.white),
+//                         image: DecorationImage(
+//                             fit: BoxFit.cover,
+//                             image: AssetImage('assets/oldImages/user.png'))),
+//                   ),
+//                   Padding(
+//                     padding: EdgeInsets.symmetric(vertical: _height * .01),
+//                     child: Text(
+//                       globalController.pref.getString(UserData.USER_NAME),
+//                       style:
+//                       TextStyle(color: Colors.white, fontSize: _height * .03),
+//                     ),
+//                   ),
+//                   Text(
+//                     globalController.pref.getString(UserData.USER_EMAIL),
+//                     style: TextStyle(color: Colors.white),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//           ListTile(
+//             tileColor: Colors.transparent,
+//             title: Text(
+//               'All Categories',
+//               style: TextStyle(fontSize: _height * 0.023),
+//             ),
+//             trailing: Icon(
+//               Icons.arrow_forward_ios,
+//               color: Colors.black,
+//             ),
+//             onTap: () {
+//               Get.to(()=>BooksCategoryPage());
+//               // Navigator.push(
+//               //   context,
+//               //   MaterialPageRoute(builder: (context) => ),
+//               // );
+//             },
+//           ),
+//           Divider(
+//             height: 5,
+//           ),
+//           ListTile(
+//             tileColor: Colors.transparent,
+//             title: Text(
+//               'About Us',
+//               style: TextStyle(fontSize: _height * 0.023),
+//             ),
+//             trailing: Icon(
+//               Icons.arrow_forward_ios,
+//               color: Colors.black,
+//             ),
+//             onTap: () {
+//               Get.to(()=>AboutUs());
+//               // Navigator.push(
+//               //   context,
+//               //   MaterialPageRoute(builder: (context) => AboutUs()),
+//               // );
+//             },
+//           ),
+//           Divider(
+//             height: 5,
+//           ),
+//           ListTile(
+//             tileColor: Colors.transparent,
+//             title: Text(
+//               'Contact Us',
+//               style: TextStyle(fontSize: _height * 0.023),
+//             ),
+//             trailing: Icon(
+//               Icons.arrow_forward_ios,
+//               color: Colors.black,
+//             ),
+//             onTap: () {
+//               Get.to(()=>ContactUs());
+//               // Navigator.push(
+//               //   context,
+//               //   MaterialPageRoute(builder: (context) => ContactUs()),
+//               // );
+//             },
+//           ),
+//           Divider(
+//             height: 5,
+//           ),
+//           ListTile(
+//             tileColor: Colors.transparent,
+//             title: Text(
+//               'Logout ',
+//               style: TextStyle(fontSize: _height * 0.023, color: Colors.red),
+//             ),
+//             trailing: Icon(
+//               Icons.arrow_forward_ios,
+//               color: Colors.red,
+//             ),
+//             onTap: () {
+//               AuthServices.logout();
+//               Get.off(()=>LoginPage());
+//               // Navigator.pop(context);
+//               // Navigator.pushReplacement(context,
+//               //     MaterialPageRoute(builder: (BuildContext context) => MyApp()));
+//             },
+//           ),
+//           Divider(
+//             height: 5,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 // class UserHomePage extends StatefulWidget {
 //   final String currentUserId;

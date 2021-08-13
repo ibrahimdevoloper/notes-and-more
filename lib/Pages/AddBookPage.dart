@@ -34,7 +34,7 @@ class AddBookPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // print(category.name);
-    SharedPreferencesGetXController prefController = Get.find();
+    GlobalDataGetXController prefController = Get.find();
     var controller = Get.put(AddBooksGetXController(category));
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -114,6 +114,37 @@ class AddBookPage extends StatelessWidget {
                       ),
                       onChanged: (value) {
                         controller.name = value;
+                      },
+                    );
+                  },
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: GetBuilder<AddBooksGetXController>(
+                  init: controller,
+                  builder: (controller) {
+                    return TextField(
+                      // controller: bookNameController,
+                      keyboardType: TextInputType.text,
+                      autofocus: false,
+                      textInputAction: TextInputAction.next,
+                      minLines: 2,
+                      maxLines: 3,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        labelText: 'Book Details',
+                        errorText: controller.isDetailsError
+                            ? 'Please Enter a Correct Name'
+                            : null,
+                        border: OutlineInputBorder(),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      ),
+                      onChanged: (value) {
+                        controller.details = value;
                       },
                     );
                   },

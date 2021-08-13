@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +11,8 @@ import 'package:mh_care/Controller/BooksCategoryGetXController.dart';
 import 'package:mh_care/Controller/SharedPreferencesGetXController.dart';
 import 'package:mh_care/Model/UserData/UserData.dart';
 import 'package:mh_care/Pages/Admin_Home.dart';
+import 'package:mh_care/Pages/BooksPage.dart';
+import 'package:mh_care/Pages/PDFViewer.dart';
 import 'package:mh_care/Pages/UserHomePage.dart';
 import 'package:mh_care/Pages/splash_Screen.dart';
 
@@ -92,6 +95,7 @@ class _MyAppState extends State<MyApp> {
           [
             Firebase.initializeApp(),
             SharedPreferences.getInstance(),
+            FirebaseDynamicLinks.instance.getInitialLink(),
             Future.delayed(
               Duration(seconds: 2),
             ),
@@ -100,9 +104,12 @@ class _MyAppState extends State<MyApp> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             SharedPreferences pref = snapshot.data[1];
-            Get.create(() => SharedPreferencesGetXController(pref));
+            PendingDynamicLinkData pendingDynamicLinkData = snapshot.data[2];
+            Get.create(() => GlobalDataGetXController(pref,pendingDynamicLinkData));
             // Get.create(() => BooksCategoryGetXController());
+
           }
+
           return GetMaterialApp(
             title: 'Notes And More',
             debugShowCheckedModeBanner: false,
@@ -141,10 +148,9 @@ class _MyAppState extends State<MyApp> {
                 ? StreamBuilder<User>(
                     stream: FirebaseAuth.instance.authStateChanges(),
                     builder: (context, snapshot) {
-                      SharedPreferencesGetXController prefController =
+                      GlobalDataGetXController GlobalController =
                           Get.find();
-                      SharedPreferences pref = prefController.pref;
-
+                      SharedPreferences pref = GlobalController.pref;
                       if (pref.containsKey(UserData.USER_ROLE)) {
                         User user = snapshot.data;
                         //check if the user is null first bc
@@ -158,8 +164,9 @@ class _MyAppState extends State<MyApp> {
                           //if they are user return user page
                           if (pref.getString(UserData.USER_ROLE).compareTo(UserData.USER_ROLE_ADMIN)==0)
                             return AdminHome();
-                          else
+                          else {
                             return UserHomePage();
+                          }
                         }
                       } else {
                         return LoginPage();

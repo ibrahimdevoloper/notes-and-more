@@ -113,7 +113,7 @@ class AdminHome extends StatelessWidget {
                 ),
                 onTap: () {
                   // TODO: get user uid from pref
-                  SharedPreferencesGetXController prefController = Get.find();
+                  GlobalDataGetXController prefController = Get.find();
                   SharedPreferences pref =prefController.pref;
                   Get.to(()=>BooksPage());
                   // Navigator.push(

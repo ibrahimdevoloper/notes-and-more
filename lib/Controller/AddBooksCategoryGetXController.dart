@@ -28,6 +28,7 @@ class AddBooksCategoryGetXController extends GetxController {
                   createdAt: Timestamp.now().toDate(),
                   numberOfShares: 0,
                   numberOfLikes: 0,
+                  numberOfBooks: 0,
                   imageUrl: "",
                   details: _details,
                   name: _name)

@@ -26,6 +26,6 @@ class BooksCategoryGetXController extends GetxController {
 
   set isLoading(bool value) {
     _isLoading = value;
-    update(["FAP"]);
+    update();
   }
 }

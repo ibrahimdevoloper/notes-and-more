@@ -61,7 +61,7 @@ class Book {
   // static const BOOK_NUMBER_OF_BOOKS="numberOfBooks";
   static const BOOK_NUMBER_OF_LIKES = "numberOfLikes";
   static const BOOK_NUMBER_OF_SHARES = "numberOfShares";
-  static const BOOK_LIKES_LIST = "numberOfShares";
+  static const BOOK_LIKES_LIST = "bookLikesList";
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.

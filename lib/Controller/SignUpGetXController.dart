@@ -65,7 +65,7 @@ class SignUpGetXController extends GetxController {
           //   'timeCreated': Timestamp.now(),
           // }
         );
-        SharedPreferencesGetXController prefController = Get.find();
+        GlobalDataGetXController prefController = Get.find();
         SharedPreferences pref =prefController.pref;
         // UserData userData = UserData.fromJson(userDataMap.data());
         pref.setString(UserData.USER_ROLE, UserData.USER_ROLE_CUSTOMER);
